@@ -11,7 +11,7 @@ const loadNodesHtml = (node) => {
     return `http://${node.ip.Ip}:${node.ip.Port}`;
 }
 
-fetch("http://ghostnetroot.com:58080/nodes")
+fetch("https://ghostnetroot.com:58080/nodes")
     .then((response) =>response.json())
 //.then((data)=> new Map(Object.entries(data)))
     .then(parseResponse)
