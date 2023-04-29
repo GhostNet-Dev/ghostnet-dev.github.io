@@ -8,7 +8,7 @@ const parseResponse = (nodes) => {
 }
 
 const loadNodesHtml = (node) => {
-    return `http://${node.ip.Ip}:${node.ip.Port}`;
+    return `https://${node.ip.Ip}:${node.ip.Port}`;
 }
 
 fetch("https://ghostnetroot.com:58080/nodes")
