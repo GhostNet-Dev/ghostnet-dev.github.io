@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load ghostnetservice_filter %}
+{% block content %}
+<div class="container my-3">
+    <h3>New Ghost NFT Market</h3><br>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% if nftMarketList %}
+            {% for nftContract in nftMarketList%}
+            <div class="col mb-4">
+                <div class="card h-100">
+                    <img src="/media/{{nftContract.Filename}}" class="card-img-top h-30" alt="..."  style="width:100%;height:200px;object-fit:cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{nftContract.Title}}</h5>
+                        <p class="card-text"><b>{{nftContract.ContractFee|GetGhostCoin}} GTC</b></p>
+                        <a href="/nft_market/{{nftContract.TxId|GetBase58DataTxId}}/" class="btn btn-primary">NFT Id #{{nftContract.Id}}</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+                <p>there is no NFT</P>
+            {% endif %}
+        </div>
+        <!-- Content here -->
+      </div>
+      <br>
+    <!-- 페이징처리 시작 --> 
+    <ul class="pagination justify-content-center"> 
+        <!-- 이전페이지 --> 
+        {% if nftMarketList.has_previous %} 
+        <li class="page-item"> 
+            <a class="page-link" href="?page={{ nftList.previous_page_number }}">이전</a> 
+        </li> 
+        {% else %} 
+        <li class="page-item disabled"> 
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a> 
+        </li> 
+        {% endif %} 
+        <!-- 페이지리스트 --> 
+        {% for page_number in nftMarketList.paginator.page_range %} 
+            {% if page_number == nftMarketList.number %} 
+            <li class="page-item active" aria-current="page"> 
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> 
+            </li> 
+            {% else %} 
+            <li class="page-item"> 
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> 
+            </li> 
+            {% endif %} 
+        {% endfor %} 
+        <!-- 다음페이지 --> 
+        {% if nftMarketList.has_next %} 
+        <li class="page-item"> 
+            <a class="page-link" href="?page={{ nftList.next_page_number }}">다음</a> 
+        </li> 
+        {% else %} 
+        <li class="page-item disabled"> 
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a> 
+        </li> 
+        {% endif %} 
+    </ul> 
+    <!-- 페이징처리 끝 -->
+</div>
+{% endblock %}

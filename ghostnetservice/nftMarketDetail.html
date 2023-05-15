@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load ghostnetservice_filter %}
+{% block content %}
+<div class="container my-3">
+<div class='row'>
+    <div class="col-lg-4">
+        <div class="container">
+        <div class='row pb-3'>
+            <div class='col'>
+                <div class="card" style="width: 100%;">
+                    <div class="card-body">NFT
+                    </div>
+                    <img class="card-img-bottom" src="/media/{{nftContract.Filename}}" alt="Card image cap">
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <br>
+    <div class="col-lg-6">
+        <div class="container">
+        <div class='row'>
+            <div class='col'>
+                <h4><b>{{nftContract.Title}}</b></h4>
+                Create by <b>{{nftContract.GhostNickname}}</b>
+                <small class="text-muted">@{{nftContract.Time|ConvertToDate}}</small>
+                <br>
+                <hr class="bg-silver border-2 border-top border-silver">
+            </div>
+        </div>
+        <div class='row pb-3'>
+            <div class='col'>               
+                Owned by  <a href="/user/{{owner.PubKeyAddress}}"><img class="align-self-center ml-2 mr-2" 
+                src="{%static 'img/ghost_background_black@1x.png'%}"></a><b>{{owner.GhostNickname}}</b>
+            </div>
+        </div>
+        <div class='row pb-3'>
+            <div class='col'> 
+                <small class="text-muted">Current price (GhostCoin)</small>
+                <h3><b>{{nftContract.ContractFee|GetGhostCoin}}</b></h3>                
+            </div>
+        </div>
+        <div class='row pb-3'>
+            <div class='col'> 
+                <a href="/user/{{owner.PubKeyAddress}}" class="btn btn-primary btn-sm" role="button" aria-disabled="true">NFT Shop</a>                
+            </div>
+        </div>
+        <div class='row pb-3'>
+            <div class='col'>
+                <div class="card">
+                    <div class="card-header">
+                    <b>Description</b>
+                    </div>
+                    <div class="card-body">
+                        {{nftContract.Content}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+            
+    </div>
+</div>
+</div>
+{% endblock %}

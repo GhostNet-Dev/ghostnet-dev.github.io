@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load ghostnetservice_filter %}
+{% block content %}
+<div class="container my-3">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">User Id</th>
+                <th scope="col">Block Id</th>
+                <th scope="col">Ghost Nickname</th>
+                <th scope="col">PubKey Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if userList %}
+            {% for user in userList%}
+            <tr>
+                <td>
+                    <a href="/users/{{user.Id}}/">User Id #{{user.Id}}</a>
+                </td>
+                <td>{{user.BlockId}}</td>
+                <td>{{user.GhostNickname}}</td>
+                <td>{{user.PubKeyAddress}}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td>
+                <p>there is no user</p>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if pairedBlockList.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ userList.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in pairedBlockList.paginator.page_range %}
+            {% if page_number == pairedBlockList.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if pairedBlockList.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ userList.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
+</div>
+{% endblock %}

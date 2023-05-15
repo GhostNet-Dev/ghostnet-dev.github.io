@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load ghostnetservice_filter %}
+{% block content %}
+<div class="container my-3">
+    <div class="row"><div class="col">
+    <h3>New Ghost NFTs</h3>
+    </div></div>
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="container my-3 px-0">
+                <div class="row"><div class="col">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" 
+                        aria-haspopup="true" aria-expanded="false">
+                            Category
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/nfts/category/10000000/">예능</a>
+                            <a class="dropdown-item" href="/nfts/category/20000000/">음악</a>
+                            <a class="dropdown-item" href="/nfts/category/30000000/">사람</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/nfts/category/40000000/">영화</a>
+                            <a class="dropdown-item" href="/nfts/category/50000000/">교육</a>
+                            <a class="dropdown-item" href="/nfts/category/60000000/">코메디</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/nfts/category/70000000/">스타일</a>
+                            <a class="dropdown-item" href="/nfts/category/80000000/">뉴스</a>
+                            <a class="dropdown-item" href="/nfts/category/90000000/">정치</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/nfts/category/100000000/">스포츠</a>
+                            <a class="dropdown-item" href="/nfts/category/110000000/">과학/기술</a>
+                            <a class="dropdown-item" href="/nfts/category/120000000/">자동차</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/nfts/category/130000000/">여행</a>
+                            <a class="dropdown-item" href="/nfts/category/140000000/">동물</a>
+                            <a class="dropdown-item" href="/nfts/category/150000000/">기타</a>
+                        </div>
+                    </div>
+                </div></div>
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <div class="container my-3 px-0">
+                <div class="row row-cols-1 row-cols-md-3 g-4">    
+                    {% if nftList %}
+                    {% for nft in nftList%}
+                    <div class="col mb-4">
+                        <div class="card h-150">
+                            <a href="/nfts/{{nft.DataTxId|GetBase58DataTxId}}/">
+                                <img src="/media/{{nft.Filename}}" class="card-img-top h-30" alt="..."  style="width:100%;height:200px;object-fit:cover;">
+                            </a>
+                            <div class="card-body">                                
+                                <p class="card-text"><b>{{nft.Title}}</b>
+                                    <br>{{nft.Content}}</p>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted">#{{nft.Category|GetCategoryString}} · {{nft.Time|ConvertToDate}}</small>
+                            </div>
+                        </div>  
+                    </div>  
+                    <br> 
+                    <br>                    
+                    {% endfor %}
+                    {% else %}
+                    <div class="col mb-4">
+                        <p>등록된 NFT가 없습니다.</P>
+                    </div>
+                    {% endif %}
+                </div>
+                <!-- Content here -->
+                </div>
+                <!-- 페이징처리 시작 --> 
+                <ul class="pagination justify-content-center"> 
+                    <!-- 이전페이지 --> 
+                    {% if nftList.has_previous %} 
+                    <li class="page-item"> 
+                        <a class="page-link" href="?page={{ nftList.previous_page_number }}">이전</a> 
+                    </li> 
+                    {% else %} 
+                    <li class="page-item disabled"> 
+                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a> 
+                    </li> 
+                    {% endif %} 
+                    <!-- 페이지리스트 --> 
+                    {% for page_number in nftList.paginator.page_range %} 
+                        {% if page_number == nftList.number %} 
+                        <li class="page-item active" aria-current="page"> 
+                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> 
+                        </li> 
+                        {% else %} 
+                        <li class="page-item"> 
+                            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a> 
+                        </li> 
+                        {% endif %} 
+                    {% endfor %} 
+                    <!-- 다음페이지 --> 
+                    {% if nftList.has_next %} 
+                    <li class="page-item"> 
+                        <a class="page-link" href="?page={{ nftList.next_page_number }}">다음</a> 
+                    </li> 
+                    {% else %} 
+                    <li class="page-item disabled"> 
+                        <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a> 
+                    </li> 
+                    {% endif %} 
+                </ul> 
+                <!-- 페이징처리 끝 -->
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
