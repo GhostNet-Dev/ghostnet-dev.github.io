@@ -1,91 +1,118 @@
-import { elapsedTime } from "./utils.js";
-const PageViewCount = 10;
-const MaxUnsignedInt = ((1 << 31) >>> 0); // unsigned int max
+import { BlockInfo } from "./blockinfo.js";
+import { TxInfo } from "./txinfo.js";
+import { BlockStore } from "./store.js";
 
-let g_minBlockId: number = MaxUnsignedInt; // unsigned int max
-let g_masterAddr: string;
+const blockStore = new BlockStore();
 
-const insertBlockInfo = (blockHeaders: any[]) => {
-    const t = document.querySelector('#blockinfo') as HTMLTableElement;
-    if (t == null) return 1;
-    blockHeaders.forEach(blockInfo => {
-        const newRow = t.insertRow();
-        const newCell1 = newRow.insertCell(0);
-        const newCell2 = newRow.insertCell(1);
-        const newCell3 = newRow.insertCell(2);
-        const newCell4 = newRow.insertCell(3);
+interface IPage {
+    Run(str: string): boolean; 
+    Release(): void;
+}
 
-        newCell1.innerText = `${blockInfo.Header.Id}`;
-        newCell2.innerText = `${elapsedTime(Number(blockInfo.Header.TimeStamp) * 1000)}`;
-        newCell3.innerText = `${blockInfo.Header.TransactionCount + blockInfo.Header.AliceCount}`;
-        newCell4.innerText = `${blockInfo.IssuedCoin}`;
-        if (g_minBlockId > Number(blockInfo.Header.Id)) g_minBlockId = Number(blockInfo.Header.Id)
-    });
-};
-
-const handleScroll = () => {
-    const endOfPage = window.innerHeight <= window.pageYOffset + document.body.offsetHeight;
-    console.log(window.innerHeight);
-    console.log(window.pageYOffset);
-    console.log(document.body.offsetHeight);
-    console.log(endOfPage);
-    if (endOfPage) {
-        // execute Loading
-        fetchBlockInfo(g_masterAddr);
+type FuncMap = { [key: string]: IPage };
+type UrlMap = { [key: string]: string; };
+declare global {
+    interface Window {
+        ClickLoadPage: (key: string) => void;
+        NavExpended: () => void;
+        MasterAddr: string;
     }
 }
 
-let throttleWait: boolean;
-const throttle: EventListener = (evt: Event): void => {
-    if (throttleWait) return;
-    throttleWait = true;
-    console.log("throttle")
-    setTimeout(() => {
-        handleScroll();
-        throttleWait = false;
-    }, 250);
+const funcMap: FuncMap = {
+    /*
+    "main": null,
+    "signin": null,
+    "signup": null,
+    "hons": null,
+    "hon": null,
+    */
+    "blockdetail": new TxInfo(blockStore),
+    "blockscan": new BlockInfo(blockStore),
 };
 
-const Range = () => {
-    const requestBlockIds = new Array(PageViewCount);
-    let pos = g_minBlockId - 1;
+const urlToFileMap: UrlMap = {
+    "main": "ghostnetservice/main.html",
+    "signin": "ghostnetservice/signin.html",
+    "signup": "ghostnetservice/signup.html",
+    "hons": "ghostnetservice/hons.html",
+    "hon": "ghostnetservice/hon.html",
+    "blockdetail": "ghostnetservice/blockdetail.html",
+    "blockscan": "ghostnetservice/blocklist.html",
+};
 
-    for (let i = 0; i < PageViewCount && pos > 0; i++, pos--) {
-        requestBlockIds[i] = pos;
-    }
-
-    return requestBlockIds
+const getPageIdParam = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageid = urlParams.get("pageid");
+    const key = (pageid == null) ? "main" : pageid;
+    return key;
 }
 
-const fetchBlockInfo = (target: string) => {
-    g_masterAddr = target;
-    const promise = (g_minBlockId == MaxUnsignedInt) ?
-        fetch(target + "/blocks", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
+let beforPage: string;
+window.ClickLoadPage = (key: string, ...arg: string[]) => {
+    if (getPageIdParam() == key) return;
+
+    let url = urlToFileMap[key];
+    let state = { 'url': window.location.href };
+    let backUpBeforPage = beforPage;
+    beforPage = key;
+
+    history.pushState(state, "login", "./?pageid=" + key + arg);
+    fetch(url)
+        .then(response => { return response.text(); })
+        .then(data => { (document.querySelector("contents") as HTMLDivElement).innerHTML = data; })
+        .then(() => {
+            const pageObj = funcMap[key];
+            if (pageObj != undefined) {
+                pageObj.Run(window.MasterAddr);
             }
-        }) : fetch(target + "/blocks", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(Range())
+            const beforePageObj = funcMap[backUpBeforPage];
+            if (beforePageObj != undefined) {
+                beforePageObj.Release();
+            }
         });
-    promise.then((response) => response.json())
-        .then((list) => insertBlockInfo(list));
-    return promise;
+    window.NavExpended();
+};
+let expendFlag = false;
+window.NavExpended = () => {
+    let view = (expendFlag == false) ? "block" : "none";
+    (document.querySelector("#navbarNav") as HTMLDivElement).style.display = view;
+    (document.querySelector("#navbarNavRight") as HTMLDivElement).style.display = view;
+    expendFlag = !expendFlag;
+};
+
+window.onpopstate = function (event) {
+    const key = getPageIdParam();
+    includeContentHTML(window.MasterAddr);
+};
+
+const parseResponse = (nodes: any[]) => {
+    let randIdx = Math.floor(Math.random() * nodes.length);
+    console.log(nodes);
+    return nodes[randIdx];
+};
+
+const loadNodesHtml = (node: any) => {
+    window.MasterAddr = `http://${node.ip.Ip}:${node.ip.Port}`;
+    return window.MasterAddr;
+};
+const includeHTML = (id: string, filename: string) => {
+    window.addEventListener('load', () => fetch(filename)
+        .then(response => { return response.text(); })
+        .then(data => { (document.querySelector(id) as HTMLDivElement).innerHTML = data; }));
 }
 
-const BlockScan = (target: string) => {
-    fetchBlockInfo(target)
-        //.then((evt)=> handleScroll())
-        .then(() => window.addEventListener("scroll", throttle));
-};
+const includeContentHTML = (master: string) => {
+    let filename = urlToFileMap[getPageIdParam()];
+    fetch(filename)
+        .then(response => { return response.text(); })
+        .then(data => { (document.querySelector("contents") as HTMLDivElement).innerHTML = data; })
+        .then(() => {
+            const pageObj = funcMap[getPageIdParam()];
+            if (pageObj != undefined) {
+                pageObj.Run(master);
+            }
+        });
+}
 
-const BlockScanRelease = () => {
-    window.removeEventListener("scroll", throttle);
-};
-
-
-export { BlockScan, BlockScanRelease };
+export { includeContentHTML, includeHTML, loadNodesHtml, parseResponse }

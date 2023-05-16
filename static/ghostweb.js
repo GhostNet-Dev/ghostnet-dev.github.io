@@ -1,82 +1,93 @@
-import { elapsedTime } from "./utils.js";
-const PageViewCount = 10;
-const MaxUnsignedInt = ((1 << 31) >>> 0); // unsigned int max
-let g_minBlockId = MaxUnsignedInt; // unsigned int max
-let g_masterAddr;
-const insertBlockInfo = (blockHeaders) => {
-    const t = document.querySelector('#blockinfo');
-    if (t == null)
-        return 1;
-    blockHeaders.forEach(blockInfo => {
-        const newRow = t.insertRow();
-        const newCell1 = newRow.insertCell(0);
-        const newCell2 = newRow.insertCell(1);
-        const newCell3 = newRow.insertCell(2);
-        const newCell4 = newRow.insertCell(3);
-        newCell1.innerText = `${blockInfo.Header.Id}`;
-        newCell2.innerText = `${elapsedTime(Number(blockInfo.Header.TimeStamp) * 1000)}`;
-        newCell3.innerText = `${blockInfo.Header.TransactionCount + blockInfo.Header.AliceCount}`;
-        newCell4.innerText = `${blockInfo.IssuedCoin}`;
-        if (g_minBlockId > Number(blockInfo.Header.Id))
-            g_minBlockId = Number(blockInfo.Header.Id);
-    });
+import { BlockInfo } from "./blockinfo.js";
+import { TxInfo } from "./txinfo.js";
+import { BlockStore } from "./store.js";
+const blockStore = new BlockStore();
+const funcMap = {
+    /*
+    "main": null,
+    "signin": null,
+    "signup": null,
+    "hons": null,
+    "hon": null,
+    */
+    "blockdetail": new TxInfo(blockStore),
+    "blockscan": new BlockInfo(blockStore),
 };
-const handleScroll = () => {
-    const endOfPage = window.innerHeight <= window.pageYOffset + document.body.offsetHeight;
-    console.log(window.innerHeight);
-    console.log(window.pageYOffset);
-    console.log(document.body.offsetHeight);
-    console.log(endOfPage);
-    if (endOfPage) {
-        // execute Loading
-        fetchBlockInfo(g_masterAddr);
-    }
+const urlToFileMap = {
+    "main": "ghostnetservice/main.html",
+    "signin": "ghostnetservice/signin.html",
+    "signup": "ghostnetservice/signup.html",
+    "hons": "ghostnetservice/hons.html",
+    "hon": "ghostnetservice/hon.html",
+    "blockdetail": "ghostnetservice/blockdetail.html",
+    "blockscan": "ghostnetservice/blocklist.html",
 };
-let throttleWait;
-const throttle = (evt) => {
-    if (throttleWait)
+const getPageIdParam = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageid = urlParams.get("pageid");
+    const key = (pageid == null) ? "main" : pageid;
+    return key;
+};
+let beforPage;
+window.ClickLoadPage = (key, ...arg) => {
+    if (getPageIdParam() == key)
         return;
-    throttleWait = true;
-    console.log("throttle");
-    setTimeout(() => {
-        handleScroll();
-        throttleWait = false;
-    }, 250);
-};
-const Range = () => {
-    const requestBlockIds = new Array(PageViewCount);
-    let pos = g_minBlockId - 1;
-    for (let i = 0; i < PageViewCount && pos > 0; i++, pos--) {
-        requestBlockIds[i] = pos;
-    }
-    return requestBlockIds;
-};
-const fetchBlockInfo = (target) => {
-    g_masterAddr = target;
-    const promise = (g_minBlockId == MaxUnsignedInt) ?
-        fetch(target + "/blocks", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        }) : fetch(target + "/blocks", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(Range())
+    let url = urlToFileMap[key];
+    let state = { 'url': window.location.href };
+    let backUpBeforPage = beforPage;
+    beforPage = key;
+    history.pushState(state, "login", "./?pageid=" + key + arg);
+    fetch(url)
+        .then(response => { return response.text(); })
+        .then(data => { document.querySelector("contents").innerHTML = data; })
+        .then(() => {
+        const pageObj = funcMap[key];
+        if (pageObj != undefined) {
+            pageObj.Run(window.MasterAddr);
+        }
+        const beforePageObj = funcMap[backUpBeforPage];
+        if (beforePageObj != undefined) {
+            beforePageObj.Release();
+        }
     });
-    promise.then((response) => response.json())
-        .then((list) => insertBlockInfo(list));
-    return promise;
+    window.NavExpended();
 };
-const BlockScan = (target) => {
-    fetchBlockInfo(target)
-        //.then((evt)=> handleScroll())
-        .then(() => window.addEventListener("scroll", throttle));
+let expendFlag = false;
+window.NavExpended = () => {
+    let view = (expendFlag == false) ? "block" : "none";
+    document.querySelector("#navbarNav").style.display = view;
+    document.querySelector("#navbarNavRight").style.display = view;
+    expendFlag = !expendFlag;
 };
-const BlockScanRelease = () => {
-    window.removeEventListener("scroll", throttle);
+window.onpopstate = function (event) {
+    const key = getPageIdParam();
+    includeContentHTML(window.MasterAddr);
 };
-export { BlockScan, BlockScanRelease };
+const parseResponse = (nodes) => {
+    let randIdx = Math.floor(Math.random() * nodes.length);
+    console.log(nodes);
+    return nodes[randIdx];
+};
+const loadNodesHtml = (node) => {
+    window.MasterAddr = `http://${node.ip.Ip}:${node.ip.Port}`;
+    return window.MasterAddr;
+};
+const includeHTML = (id, filename) => {
+    window.addEventListener('load', () => fetch(filename)
+        .then(response => { return response.text(); })
+        .then(data => { document.querySelector(id).innerHTML = data; }));
+};
+const includeContentHTML = (master) => {
+    let filename = urlToFileMap[getPageIdParam()];
+    fetch(filename)
+        .then(response => { return response.text(); })
+        .then(data => { document.querySelector("contents").innerHTML = data; })
+        .then(() => {
+        const pageObj = funcMap[getPageIdParam()];
+        if (pageObj != undefined) {
+            pageObj.Run(master);
+        }
+    });
+};
+export { includeContentHTML, includeHTML, loadNodesHtml, parseResponse };
 //# sourceMappingURL=ghostweb.js.map

@@ -4260,9 +4260,6 @@ input[type="button"].btn-block {
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
-  position: fixed;
-  top: 0;
-  left: 0;
 }
 
 .nav-link {
@@ -4349,11 +4346,6 @@ input[type="button"].btn-block {
 }
 
 .navbar {
-  position: fixed;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  right:0;
   transition: all 300ms ease-in-out;
   display: -ms-flexbox;
   display: flex;
@@ -4364,6 +4356,7 @@ input[type="button"].btn-block {
   -ms-flex-pack: justify;
   justify-content: space-between;
   padding: 0.5rem 1rem;
+  width: 100%;
 }
 .navbar-transition,
 .navbar-transition a a:hover {
