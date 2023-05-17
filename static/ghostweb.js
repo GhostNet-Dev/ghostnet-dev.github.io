@@ -1,6 +1,7 @@
 import { BlockInfo } from "./blockinfo.js";
 import { TxInfo } from "./txinfo.js";
 import { BlockStore } from "./store.js";
+import { TxDetail } from "./txdetail.js";
 const blockStore = new BlockStore();
 const funcMap = {
     /*
@@ -10,6 +11,7 @@ const funcMap = {
     "hons": null,
     "hon": null,
     */
+    "txdetail": new TxDetail(blockStore),
     "blockdetail": new TxInfo(blockStore),
     "blockscan": new BlockInfo(blockStore),
 };
@@ -19,6 +21,7 @@ const urlToFileMap = {
     "signup": "ghostnetservice/signup.html",
     "hons": "ghostnetservice/hons.html",
     "hon": "ghostnetservice/hon.html",
+    "txdetail": "ghostnetservice/txdetail.html",
     "blockdetail": "ghostnetservice/blockdetail.html",
     "blockscan": "ghostnetservice/blocklist.html",
 };
@@ -29,7 +32,7 @@ const getPageIdParam = () => {
     return key;
 };
 let beforPage;
-window.ClickLoadPage = (key, ...arg) => {
+window.ClickLoadPage = (key, fromEvent, ...arg) => {
     if (getPageIdParam() == key)
         return;
     let url = urlToFileMap[key];
@@ -50,7 +53,10 @@ window.ClickLoadPage = (key, ...arg) => {
             beforePageObj.Release();
         }
     });
-    window.NavExpended();
+    if (fromEvent) {
+        window.NavExpended();
+    }
+    console.log(fromEvent);
 };
 let expendFlag = false;
 window.NavExpended = () => {
@@ -60,7 +66,6 @@ window.NavExpended = () => {
     expendFlag = !expendFlag;
 };
 window.onpopstate = function (event) {
-    const key = getPageIdParam();
     includeContentHTML(window.MasterAddr);
 };
 const parseResponse = (nodes) => {

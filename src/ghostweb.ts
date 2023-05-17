@@ -1,6 +1,7 @@
 import { BlockInfo } from "./blockinfo.js";
 import { TxInfo } from "./txinfo.js";
 import { BlockStore } from "./store.js";
+import { TxDetail } from "./txdetail.js";
 
 const blockStore = new BlockStore();
 
@@ -13,7 +14,7 @@ type FuncMap = { [key: string]: IPage };
 type UrlMap = { [key: string]: string; };
 declare global {
     interface Window {
-        ClickLoadPage: (key: string) => void;
+        ClickLoadPage: (key: string, from: boolean, ...arg: string[]) => void;
         NavExpended: () => void;
         MasterAddr: string;
     }
@@ -27,6 +28,7 @@ const funcMap: FuncMap = {
     "hons": null,
     "hon": null,
     */
+    "txdetail": new TxDetail(blockStore),
     "blockdetail": new TxInfo(blockStore),
     "blockscan": new BlockInfo(blockStore),
 };
@@ -37,6 +39,7 @@ const urlToFileMap: UrlMap = {
     "signup": "ghostnetservice/signup.html",
     "hons": "ghostnetservice/hons.html",
     "hon": "ghostnetservice/hon.html",
+    "txdetail": "ghostnetservice/txdetail.html",
     "blockdetail": "ghostnetservice/blockdetail.html",
     "blockscan": "ghostnetservice/blocklist.html",
 };
@@ -49,7 +52,7 @@ const getPageIdParam = () => {
 }
 
 let beforPage: string;
-window.ClickLoadPage = (key: string, ...arg: string[]) => {
+window.ClickLoadPage = (key: string, fromEvent: boolean, ...arg: string[]) => {
     if (getPageIdParam() == key) return;
 
     let url = urlToFileMap[key];
@@ -71,7 +74,10 @@ window.ClickLoadPage = (key: string, ...arg: string[]) => {
                 beforePageObj.Release();
             }
         });
-    window.NavExpended();
+    if (fromEvent) {
+        window.NavExpended();
+    }
+    console.log(fromEvent)
 };
 let expendFlag = false;
 window.NavExpended = () => {
@@ -82,7 +88,6 @@ window.NavExpended = () => {
 };
 
 window.onpopstate = function (event) {
-    const key = getPageIdParam();
     includeContentHTML(window.MasterAddr);
 };
 
