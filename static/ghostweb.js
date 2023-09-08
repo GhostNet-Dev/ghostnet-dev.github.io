@@ -6,14 +6,18 @@ import { GWSMain } from "./gwsmain.js";
 import { AccountDetail } from "./accountdetail.js";
 import { Hons } from "./hons/hons.js";
 import { Hon } from "./hons/hon.js";
+import { NewHon } from "./hons/newhon.js";
 import { Signup } from "./hons/signup.js";
 import { Signin } from "./hons/signin.js";
+import { Session } from "./hons/session.js";
 const blockStore = new BlockStore();
+const session = new Session();
 const funcMap = {
-    "signin": new Signin(blockStore),
-    "signup": new Signup(blockStore),
-    "hon": new Hon(blockStore),
-    "hons": new Hons(blockStore),
+    "signin": new Signin(blockStore, session),
+    "signup": new Signup(blockStore, session),
+    "hon": new Hon(blockStore, session),
+    "hons": new Hons(blockStore, session),
+    "newhon": new NewHon(blockStore, session),
     "main": new GWSMain(blockStore),
     "txdetail": new TxDetail(blockStore),
     "blockdetail": new TxInfo(blockStore),
@@ -26,6 +30,7 @@ const urlToFileMap = {
     "signup": "hons/signup.html",
     "hons": "hons/hons.html",
     "hon": "hons/hon.html",
+    "newhon": "hons/newhon.html",
     "txdetail": "ghostnetservice/txdetail.html",
     "blockdetail": "ghostnetservice/blockdetail.html",
     "blockscan": "ghostnetservice/blocklist.html",
@@ -42,6 +47,7 @@ const getPageIdParam = () => {
 let beforPage;
 window.ClickLoadPage = (key, fromEvent, ...args) => {
     //if (getPageIdParam() == key) return;
+    session.DrawHtmlSessionInfo();
     const url = urlToFileMap[key];
     const state = {
         'url': window.location.href,
@@ -98,6 +104,7 @@ const includeHTML = (id, filename) => {
         .then(data => { document.querySelector(id).innerHTML = data; }));
 };
 const includeContentHTML = (master) => {
+    session.DrawHtmlSessionInfo();
     const key = getPageIdParam();
     const filename = urlToFileMap[key];
     const backUpBeforPage = beforPage;

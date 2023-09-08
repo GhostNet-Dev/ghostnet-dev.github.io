@@ -34,3 +34,6 @@ export type GhostWebUser = {
     User: GhostNetUser,
     WebPort: string,
 }
+export type FetchResult = {
+    result: string
+}

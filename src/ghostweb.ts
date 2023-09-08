@@ -6,11 +6,14 @@ import { GWSMain } from "./gwsmain.js";
 import { AccountDetail } from "./accountdetail.js";
 import { Hons } from "./hons/hons.js";
 import { Hon } from "./hons/hon.js";
+import { NewHon } from "./hons/newhon.js";
 import { Signup } from "./hons/signup.js";
 import { Signin } from "./hons/signin.js";
+import { Session } from "./hons/session.js";
 import { GhostWebUser } from "./models/param.js";
 
 const blockStore = new BlockStore();
+const session = new Session();
 
 interface IPage {
     Run(str: string): boolean; 
@@ -29,10 +32,11 @@ declare global {
 }
 
 const funcMap: FuncMap = {
-    "signin": new Signin(blockStore),
-    "signup": new Signup(blockStore),
-    "hon": new Hon(blockStore),
-    "hons": new Hons(blockStore),
+    "signin": new Signin(blockStore, session),
+    "signup": new Signup(blockStore, session),
+    "hon": new Hon(blockStore, session),
+    "hons": new Hons(blockStore, session),
+    "newhon": new NewHon(blockStore, session),
     "main": new GWSMain(blockStore),
     "txdetail": new TxDetail(blockStore),
     "blockdetail": new TxInfo(blockStore),
@@ -46,6 +50,7 @@ const urlToFileMap: UrlMap = {
     "signup": "hons/signup.html",
     "hons": "hons/hons.html",
     "hon": "hons/hon.html",
+    "newhon": "hons/newhon.html",
     "txdetail": "ghostnetservice/txdetail.html",
     "blockdetail": "ghostnetservice/blockdetail.html",
     "blockscan": "ghostnetservice/blocklist.html",
@@ -63,6 +68,7 @@ const getPageIdParam = () => {
 let beforPage: string;
 window.ClickLoadPage = (key: string, fromEvent: boolean, ...args: string[]) => {
     //if (getPageIdParam() == key) return;
+    session.DrawHtmlSessionInfo();
 
     const url = urlToFileMap[key];
     const state = { 
@@ -126,6 +132,7 @@ const includeHTML = (id: string, filename: string) => {
 }
 
 const includeContentHTML = (master: string) => {
+    session.DrawHtmlSessionInfo();
     const key = getPageIdParam();
     const filename = urlToFileMap[key];
     const backUpBeforPage = beforPage;
