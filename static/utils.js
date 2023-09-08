@@ -12,10 +12,14 @@ function elapsedTime(date) {
     for (const value of times) {
         const betweenTime = Math.floor(diff / value.milliSeconds);
         if (betweenTime > 0) {
-            return `${betweenTime}${value.name} ago`;
+            return `${betweenTime} ${value.name} ago`;
         }
     }
     return "now";
 }
-export { elapsedTime };
+function calcGCoin(coin) {
+    const gcoin = coin / 1000000.0;
+    return gcoin.toFixed(3);
+}
+export { elapsedTime, calcGCoin };
 //# sourceMappingURL=utils.js.map

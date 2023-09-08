@@ -1,92 +1,117 @@
-import { elapsedTime } from "./utils.js";
+import { elapsedTime, calcGCoin } from "./utils.js";
 const PageViewCount = 10;
 const MaxUnsignedInt = ((1 << 31) >>> 0); // unsigned int max
 export class BlockInfo {
     constructor(blockStore) {
         this.blockStore = blockStore;
-        this.Release = () => {
-            window.removeEventListener("scroll", this.throttle);
-        };
-        this.g_minBlockId = MaxUnsignedInt;
-        this.g_masterAddr = "";
+        this.m_minBlockId = MaxUnsignedInt;
+        this.m_masterAddr = "";
         this.throttleWait = false;
+        this.m_blockStore = blockStore;
     }
-    insertBlockInfo(blockInfoParam) {
+    insertHtmlBlockInfo(blockInfoParam, t) {
+        const blockInfo = blockInfoParam;
+        const newRow = t.insertRow();
+        const newCell1 = newRow.insertCell(0);
+        const newCell2 = newRow.insertCell(1);
+        const newCell3 = newRow.insertCell(2);
+        const newCell4 = newRow.insertCell(3);
+        const newCell5 = newRow.insertCell(4);
+        const linkText = `ClickLoadPage("blockdetail", false, "&blockid=${blockInfo.Header.Id}")`;
+        newCell1.setAttribute('onclick', linkText);
+        newCell1.setAttribute('class', 'handcursor');
+        newCell1.innerHTML = `${blockInfo.Header.Id}`;
+        newCell2.setAttribute('onclick', linkText);
+        newCell2.setAttribute('class', 'handcursor');
+        newCell2.innerText = `${elapsedTime(Number(blockInfo.Header.TimeStamp) * 1000)}`;
+        newCell3.setAttribute('onclick', linkText);
+        newCell3.setAttribute('class', 'handcursor');
+        newCell3.innerText = `${blockInfo.Header.TransactionCount + blockInfo.Header.AliceCount}`;
+        newCell4.setAttribute('onclick', linkText);
+        newCell4.setAttribute('class', 'handcursor');
+        newCell4.innerText = `${calcGCoin(blockInfo.IssuedCoin)}`;
+        newCell5.setAttribute('onclick', linkText);
+        newCell5.setAttribute('class', 'handcursor');
+        newCell5.setAttribute('id', 'bminer' + blockInfo.Header.Id);
+        const pubKey = blockInfo.Header.BlockSignature.PubKey;
+        this.m_blockStore.RequestAccount(pubKey)
+            .then((res) => {
+            const tag = document.getElementById('bminer' + blockInfo.Header.Id);
+            if (tag == null)
+                return;
+            tag.innerHTML = `
+                        <a onclick='ClickLoadPage("accountdetail", false, "&nick=${res.Nickname}")'>${res.Nickname}</a>`;
+        });
+        if (this.m_minBlockId > Number(blockInfo.Header.Id))
+            this.m_minBlockId = Number(blockInfo.Header.Id);
+    }
+    reloadBlockInfo(blockInfoParams) {
+        console.log("reload");
         const t = document.querySelector('#blockinfo');
         if (t == null)
-            return 1;
-        this.blockStore.InsertBlockInfos(blockInfoParam);
-        blockInfoParam.forEach(blockInfo => {
-            const newRow = t.insertRow();
-            const newCell1 = newRow.insertCell(0);
-            const newCell2 = newRow.insertCell(1);
-            const newCell3 = newRow.insertCell(2);
-            const newCell4 = newRow.insertCell(3);
-            const link = document.createElement('a');
-            link.setAttribute('onclick', `ClickLoadPage("blockdetail", false, "&blockid=${blockInfo.Header.Id}")`);
-            link.innerHTML = `${blockInfo.Header.Id}`;
-            newCell1.appendChild(link);
-            newCell2.innerText = `${elapsedTime(Number(blockInfo.Header.TimeStamp) * 1000)}`;
-            newCell3.innerText = `${blockInfo.Header.TransactionCount + blockInfo.Header.AliceCount}`;
-            newCell4.innerText = `${blockInfo.IssuedCoin}`;
-            if (this.g_minBlockId > Number(blockInfo.Header.Id))
-                this.g_minBlockId = Number(blockInfo.Header.Id);
-        });
+            return;
+        this.blockStore.InsertBlockInfos(blockInfoParams);
+        this.blockStore.GetBlockInfos().forEach(param => this.insertHtmlBlockInfo(param, t));
     }
-    handleScroll() {
-        const endOfPage = window.innerHeight <= window.pageYOffset + document.body.offsetHeight;
-        console.log(window.innerHeight);
-        console.log(window.pageYOffset);
-        console.log(document.body.offsetHeight);
-        console.log(endOfPage);
-        if (endOfPage) {
+    insertBlockInfo(blockInfoParams) {
+        console.log("insert");
+        const t = document.querySelector('#blockinfo');
+        if (t == null)
+            return;
+        this.blockStore.InsertBlockInfos(blockInfoParams);
+        blockInfoParams.forEach(param => this.insertHtmlBlockInfo(param, t));
+    }
+    HandleScroll() {
+        const scrollLocation = document.documentElement.scrollTop;
+        const windowHeight = window.innerHeight;
+        const fullheight = document.body.scrollHeight;
+        if (scrollLocation + windowHeight >= fullheight) {
             // execute Loading
-            this.fetchBlockInfo(this.g_masterAddr);
+            this.fetchBlockInfo();
         }
     }
     throttle(evt) {
         if (this.throttleWait)
             return;
         this.throttleWait = true;
-        console.log("throttle");
         setTimeout(() => {
-            this.handleScroll();
+            this.HandleScroll();
             this.throttleWait = false;
         }, 250);
     }
     Range() {
         const requestBlockIds = new Array(PageViewCount);
-        let pos = this.g_minBlockId - 1;
+        let pos = this.m_minBlockId - 1;
         for (let i = 0; i < PageViewCount && pos > 0; i++, pos--) {
             requestBlockIds[i] = pos;
         }
         return requestBlockIds;
     }
-    fetchBlockInfo(target) {
-        this.g_masterAddr = target;
-        const promise = (this.g_minBlockId == MaxUnsignedInt) ?
-            fetch(target + "/blocks", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            }) : fetch(target + "/blocks", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.Range())
+    fetchBlockInfo() {
+        const range = (this.m_minBlockId == MaxUnsignedInt) ? null : this.Range();
+        return this.m_blockStore.RequestBlockList(range)
+            .then((list) => {
+            if (range == null) {
+                this.reloadBlockInfo(list);
+            }
+            else {
+                this.insertBlockInfo(list);
+            }
         });
-        promise.then((response) => response.json())
-            .then((list) => this.insertBlockInfo(list));
-        return promise;
     }
     Run(target) {
-        this.g_masterAddr = target;
-        this.fetchBlockInfo(target)
+        console.log("blockinfo run");
+        this.m_masterAddr = target;
+        this.fetchBlockInfo()
             //.then((evt)=> handleScroll())
-            .then(() => window.addEventListener("scroll", this.throttle));
+            .then(() => window.addEventListener("scroll", (ev) => { this.throttle(ev); }));
+        console.log(this.m_minBlockId);
         return true;
+    }
+    Release() {
+        console.log("blockinfo release");
+        this.m_minBlockId = MaxUnsignedInt;
+        window.removeEventListener("scroll", (ev) => { this.throttle(ev); });
     }
 }
 //# sourceMappingURL=blockinfo.js.map

@@ -67,6 +67,7 @@ body {
 #contents {
   margin-top:50px;
   width:100%;
+  margin-bottom:50px;
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
