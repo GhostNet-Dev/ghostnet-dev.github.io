@@ -3,6 +3,7 @@ export class Session {
         this.m_user = { Email: "", Nickname: "", Password: "" };
         this.m_signinFlag = false;
     }
+    GetHonUser() { return this.m_user; }
     DrawHtmlSessionInfo() {
         const seInfo = document.getElementById("sessioninfo");
         if (seInfo == null)

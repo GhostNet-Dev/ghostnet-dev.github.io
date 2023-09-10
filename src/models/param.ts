@@ -37,3 +37,6 @@ export type GhostWebUser = {
 export type FetchResult = {
     result: string
 }
+export type JsonFetchResult = {
+    json: string
+}
