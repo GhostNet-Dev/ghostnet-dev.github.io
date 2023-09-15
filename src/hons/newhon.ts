@@ -28,7 +28,7 @@ export class NewHon {
     public RequestNewHon() {
         const masterAddr = this.m_masterAddr;
         const user = this.m_session.GetHonUser();
-        const inputContent = document.getElementById("inputContent");
+        const inputContent = document.getElementById("inputContent") as HTMLTextAreaElement;
         const addr = masterAddr + "/glambda?txid=" + encodeURIComponent(NewHonTxId);
         fetch(addr, {
             method: "POST",
@@ -41,7 +41,7 @@ export class NewHon {
                 Password: user.Password,
                 Id: user.Nickname,
                 Time: (new Date()).getTime(),
-                Content: inputContent?.innerHTML
+                Content: inputContent?.value
             })
         })
             .then((response) => response.json())
@@ -55,6 +55,8 @@ export class NewHon {
             <a class="handcursor" onclick='ClickLoadPage("txdetail", false, "&txid=${encodeURIComponent(NewHonTxId)}")'>
                 ${NewHonTxId}
             </a> `;
+        const cont = document.getElementById("inputContent") as HTMLTextAreaElement;
+        cont.onfocus = ()=>{ if (cont.value == "Enter text") cont.value = ''; };
 
         if (!this.m_session.CheckLogin()) {
             return false;

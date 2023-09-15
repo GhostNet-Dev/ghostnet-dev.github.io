@@ -12,13 +12,14 @@ import { Signin } from "./hons/signin.js";
 import { Session } from "./hons/session.js";
 const blockStore = new BlockStore();
 const session = new Session();
+const hons = new Hons(blockStore, session);
 const funcMap = {
     "signin": new Signin(blockStore, session),
     "signup": new Signup(blockStore, session),
     "hon": new Hon(blockStore, session),
-    "hons": new Hons(blockStore, session),
+    "hons": hons,
     "newhon": new NewHon(blockStore, session),
-    "main": new GWSMain(blockStore),
+    "main": new GWSMain(blockStore, hons),
     "txdetail": new TxDetail(blockStore),
     "blockdetail": new TxInfo(blockStore),
     "blockscan": new BlockInfo(blockStore),
@@ -26,6 +27,7 @@ const funcMap = {
 };
 const urlToFileMap = {
     "main": "ghostnetservice/main.html",
+    "download": "ghostnetservice/download.html",
     "signin": "hons/signin.html",
     "signup": "hons/signup.html",
     "hons": "hons/hons.html",

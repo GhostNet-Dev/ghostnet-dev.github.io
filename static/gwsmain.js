@@ -1,9 +1,10 @@
 import { elapsedTime, calcGCoin } from "./utils.js";
 const MaxInfoViewCnt = 5;
 export class GWSMain {
-    constructor(blockStore) {
+    constructor(blockStore, hons) {
         this.blockStore = blockStore;
         this.m_blockStore = blockStore;
+        this.m_hons = hons;
         this.m_maxBlockId = 0;
         this.m_curGetherTx = 0;
         this.m_blockInfos = new Array();
@@ -27,31 +28,44 @@ export class GWSMain {
         });
         bodyTag.innerHTML += ``;
     }
-    drawHtmlLatestEarnMaster() {
+    excuteDrawHtmlLatestEarnMaster(results) {
+        if (results.length != 5)
+            return;
         const bodyTag = document.getElementById('latesttx');
         if (bodyTag == null)
             return;
-        bodyTag.innerHTML = `
-            <div class="row division-line">
-                <div class="col font-weight-bold">Latest Tx Master</div>
-            </div>
-        `;
-        this.m_blockInfos.forEach(blockInfo => {
+        bodyTag.innerHTML = `<div class="container py-0 my-0">`;
+        results.forEach((ret, idx) => {
+            const line = (idx < 4) ? `<div class="row p-1"> 
+            <div class="col"><hr class="py-0 my-0"/></div> </div>` : "";
+            bodyTag.innerHTML += `
+            <div class="row p-0 m-1">
+                <div class="col-1 align-middle"><span class="material-symbols-outlined"> 
+                toll </span>
+                </div>
+                <div class="col">${ret.Id}</div>
+                <div class="col font-weight-bold text-success">+ ${calcGCoin(ret.AddCoin)}</div>
+                <div class="col text-right">${ret.Nickname} master<br>
+                    ${calcGCoin(ret.TotalCoin)} GCoin</div>
+            </div>${line}
+                            `;
+        });
+    }
+    drawHtmlLatestEarnMaster() {
+        const results = new Array();
+        this.m_blockInfos.forEach((blockInfo, idx) => {
             const blockId = parseInt(blockInfo.Header.Id);
             this.m_blockStore.RequestBlock(blockId)
                 .then(block => {
                 block.Alice.forEach(tx => {
                     this.m_blockStore.RequestAccount(tx.Body.Vout[0].Addr)
                         .then(accountParam => {
-                        bodyTag.innerHTML += `
-            <div class="row division-line">
-                <div class="col-1">${blockInfo.Header.Id}</div>
-                <div class="col-4 maxtext">${accountParam.Nickname} master</div>
-                <div class="col-3 maxtext">${calcGCoin(accountParam.Coin)} GCoin</div>
-                <div class="col-3 maxtext">${calcGCoin(parseInt(tx.Body.Vout[0].Value))}</div>
-            </div>
-                            `;
-                    });
+                        results.push({ Id: blockInfo.Header.Id,
+                            AddCoin: parseInt(tx.Body.Vout[0].Value),
+                            Nickname: accountParam.Nickname,
+                            TotalCoin: accountParam.Coin
+                        });
+                    }).then(() => this.excuteDrawHtmlLatestEarnMaster(results));
                 });
             });
         });
@@ -67,24 +81,30 @@ export class GWSMain {
         const bodyTag = document.getElementById('latestblocks');
         if (bodyTag == null)
             return;
-        bodyTag.innerHTML = `
-            <div class="row division-line">
-                <div class="col font-weight-bold">Latest Blocks</div>
-            </div>
-        `;
-        blockInfoParams.slice(0, 5).forEach(blockInfo => {
+        bodyTag.innerHTML = `<div class="container py-0 my-0">`;
+        blockInfoParams.slice(0, 5).forEach((blockInfo, idx) => {
             this.blockInfoGether(blockInfo);
             const blockId = parseInt(blockInfo.Header.Id);
+            const line = (idx < 4) ? `<div class="row p-1"> 
+            <div class="col"><hr class="py-0 my-0"/></div> </div>` : "";
             this.m_maxBlockId = (blockId > this.m_maxBlockId) ? this.m_maxBlockId = blockId : this.m_maxBlockId;
             bodyTag.innerHTML += `
-            <div class="row division-line">
-                <div class="col-1">${blockInfo.Header.Id}</div>
-                <div class="col-3 maxtext">${elapsedTime(Number(blockInfo.Header.TimeStamp) * 1000)}</div>
-                <div class="col-2 maxtext">${blockInfo.Header.TransactionCount} txns</div>
-                <div class="col-3 maxtext">${blockInfo.Header.AliceCount} masters</div>
-                <div class="col-3 maxtex" id="bminer${blockInfo.Header.Id}">unknown</div>
+            <div class="row m-1">
+                <div class="col-1 align-middle"><span class="material-symbols-outlined"> stack </span>
+                </div>
+                 <div class="col">${blockInfo.Header.Id}<br><small>${elapsedTime(Number(blockInfo.Header.TimeStamp) * 1000)}</small>
+                </div>
+                <div class="col">
+                    <span>${blockInfo.Header.TransactionCount} txns</span><br>
+                    <span>${blockInfo.Header.AliceCount} masters</span>
+                </div>
+                <div class="col text-right">
+                    <span id="bminer${blockInfo.Header.Id}">unknown</span>
+                </div>
             </div>
+            ${line}
             `;
+            bodyTag.innerHTML += `</div>`;
             const pubKey = blockInfo.Header.BlockSignature.PubKey;
             this.m_blockStore.RequestAccount(pubKey)
                 .then((res) => {
@@ -94,10 +114,6 @@ export class GWSMain {
                 tag.innerHTML = res.Nickname;
             });
         });
-        bodyTag.innerHTML += `
-        <div class="row">
-            <div class="col text-center">View All Blocks</div>
-        </div>`;
     }
     drawHtml(blockInfoParam) {
         this.drawHtmlLatestBlock(blockInfoParam);
@@ -110,6 +126,20 @@ export class GWSMain {
         console.log(window.MasterNode);
         bodyTag.innerHTML = `<b>Connected Master</b> - ${window.MasterNode.User.Nickname}`;
     }
+    drawHtmlNewHons() {
+        const bodyTag = document.getElementById('newhon');
+        if (bodyTag == null)
+            return;
+        this.m_hons.GetHons(5, (hon) => {
+            bodyTag.innerHTML += `
+                    <span class="border rounded m-2">
+                    <span class="material-symbols-outlined"> person </span>
+                    <strong class="me-auto">${hon.Id}</strong>
+                    <small> ${elapsedTime(Number(hon.Time))}</small>
+                    - ${hon.Content}</span>
+                        `;
+        });
+    }
     Run(masterAddr) {
         this.init();
         this.drawHtmlConnectMaster();
@@ -117,6 +147,7 @@ export class GWSMain {
             .then((param) => this.drawHtmlAccountList(param));
         this.m_blockStore.RequestBlockList(null)
             .then(param => this.drawHtml(param));
+        this.drawHtmlNewHons();
         return true;
     }
     Release() { }

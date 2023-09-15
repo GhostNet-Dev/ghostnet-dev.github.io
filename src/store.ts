@@ -88,4 +88,5 @@ export class BlockStore {
             });
         return promise.then((response) => response.json())
     }
+
 }

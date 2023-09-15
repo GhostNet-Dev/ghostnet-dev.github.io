@@ -7,6 +7,7 @@ export class Hons {
         this.session = session;
         this.m_masterAddr = "";
         this.m_session = session;
+        this.m_blockStore = blockStore;
     }
     warningMsg(msg) {
         console.log(msg);
@@ -32,22 +33,21 @@ export class Hons {
             return;
         feeds.innerHTML += `
         <br>
-<div class="card">
-    <div class="card-header"> 
-        <strong class="me-auto">${ret.Id}</strong>
-        <small> ${elapsedTime(ret.Time)}</small>
-    </div>
-    <div class="card-body">
-        ${ret.Content}
-    </div>
-</div>
+            <div class="card">
+                <div class="card-header"> 
+                    <strong class="me-auto">${ret.Id}</strong>
+                    <small> ${elapsedTime(Number(ret.Time))}</small>
+                </div>
+                <div class="card-body">
+                    ${ret.Content}
+                </div>
+            </div>
         `;
         console.log(ret);
     }
-    RequestHon(keys) {
+    RequestHon(keys, callback) {
         const addr = this.m_masterAddr + "/glambda?txid=" + encodeURIComponent(HonTxId);
         keys.forEach((key) => {
-            console.log(key, "----", atob(key), "----", btoa(key));
             fetch(addr, {
                 method: "POST",
                 headers: {
@@ -59,10 +59,11 @@ export class Hons {
                 })
             })
                 .then((response) => response.json())
-                .then((result) => this.drawHtmlHon(result));
+                .then((result) => callback(result));
         });
     }
-    RequestHons() {
+    RequestHons(n, callback) {
+        this.m_masterAddr = window.MasterAddr;
         const masterAddr = this.m_masterAddr;
         const user = this.m_session.GetHonUser();
         const addr = masterAddr + "/glambda?txid=" + encodeURIComponent(HonsTxId);
@@ -74,19 +75,27 @@ export class Hons {
             body: JSON.stringify({
                 Table: "feeds",
                 Start: 0,
-                Count: 5,
+                Count: n,
             })
         })
             .then((response) => response.json())
             .then((result) => this.honsResult(result))
-            .then((keys) => this.RequestHon(keys))
+            .then((keys) => this.RequestHon(keys, callback))
             .catch(() => { this.warningMsg("Server에 문제가 생긴듯 합니다;;"); });
+    }
+    GetHons(n, callback) {
+        this.RequestHons(n, callback);
     }
     Run(masterAddr) {
         this.m_masterAddr = masterAddr;
-        this.RequestHons();
+        this.RequestHons(5, this.drawHtmlHon);
         return true;
     }
-    Release() { }
+    Release() {
+        const feeds = document.getElementById("feeds");
+        if (feeds == null)
+            return;
+        feeds.innerHTML = ``;
+    }
 }
 //# sourceMappingURL=hons.js.map

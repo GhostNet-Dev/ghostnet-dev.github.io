@@ -2,6 +2,8 @@ function elapsedTime(date) {
     const start = new Date(date);
     const end = new Date();
     const diff = (end.getTime() - start.getTime()) / 1000;
+    if (isNaN(diff))
+        return "";
     const times = [
         { name: 'years', milliSeconds: 60 * 60 * 24 * 365 },
         { name: 'months', milliSeconds: 60 * 60 * 24 * 30 },
