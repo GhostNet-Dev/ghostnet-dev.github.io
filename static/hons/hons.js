@@ -34,7 +34,9 @@ export class Hons {
         <br>
             <div class="card">
                 <div class="card-header"> 
+                    <a href="javascript:void(0)" onclick="ClickLoadPage('hondetail', false, '&email=${ret.Id}')">
                     <strong class="me-auto">${ret.Id}</strong>
+                    </a>
                     <small> ${elapsedTime(Number(ret.Time))}</small>
                 </div>
                 <div class="card-body">

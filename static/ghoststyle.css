@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp');
 
 footer {
+    /*
     position: fixed;
     bottom: 0;
     left: 0;
+    */
     width: 100%;
 }
 a, a:hover, a:focus {
