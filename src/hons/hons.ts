@@ -3,6 +3,7 @@ import { elapsedTime} from "../utils.js";
 import { Session } from "./session.js";
 
 export type HonEntry = {
+    Email: string,
     Id: string,
     Content: string,
     Time: number,
@@ -31,7 +32,6 @@ export class Hons {
     honsResult(ret: any) :string[]{
         if ("json" in ret) {
             const keys = JSON.parse(ret.json);
-            console.log(keys);
             return keys;
         } else {
             this.warningMsg("Loading 실패");
@@ -53,7 +53,6 @@ export class Hons {
                 </div>
             </div>
         `;
-        console.log(ret);
     }
     public RequestHon(keys: string[], callback: (h: HonEntry) => void) {
         const addr = this.m_masterAddr + "/glambda?txid=" + encodeURIComponent(HonTxId);

@@ -4,6 +4,7 @@ import { BlockStore } from "./store.js";
 import { TxDetail } from "./txdetail.js";
 import { GWSMain } from "./gwsmain.js";
 import { AccountDetail } from "./accountdetail.js";
+import { HonDetail } from "./hons/hondetail.js";
 import { Hons } from "./hons/hons.js";
 import { Hon } from "./hons/hon.js";
 import { NewHon } from "./hons/newhon.js";
@@ -37,6 +38,7 @@ const funcMap: FuncMap = {
     "signup": new Signup(blockStore, session),
     "hon": new Hon(blockStore, session),
     "hons": hons,
+    "hondetail": new HonDetail(blockStore,session),
     "newhon": new NewHon(blockStore, session),
     "main": new GWSMain(blockStore, hons),
     "txdetail": new TxDetail(blockStore),
@@ -52,6 +54,7 @@ const urlToFileMap: UrlMap = {
     "signup": "hons/signup.html",
     "hons": "hons/hons.html",
     "hon": "hons/hon.html",
+    "hondetail": "hons/hondetail.html",
     "newhon": "hons/newhon.html",
     "txdetail": "ghostnetservice/txdetail.html",
     "blockdetail": "ghostnetservice/blockdetail.html",

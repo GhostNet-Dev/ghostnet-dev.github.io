@@ -19,7 +19,6 @@ export class Hons {
     honsResult(ret) {
         if ("json" in ret) {
             const keys = JSON.parse(ret.json);
-            console.log(keys);
             return keys;
         }
         else {
@@ -43,7 +42,6 @@ export class Hons {
                 </div>
             </div>
         `;
-        console.log(ret);
     }
     RequestHon(keys, callback) {
         const addr = this.m_masterAddr + "/glambda?txid=" + encodeURIComponent(HonTxId);

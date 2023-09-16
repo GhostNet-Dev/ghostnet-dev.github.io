@@ -10,7 +10,11 @@ export class Session {
             return;
         if (this.m_signinFlag) {
             seInfo.innerHTML = `
-            <li class="nav-item "> <a class="nav-link" href="javascript:void(0)">${this.m_user.Nickname}</a> </li>
+            <li class="nav-item "> 
+                <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('hondetail', true, "&email=${this.m_user.Email}")">
+                    ${this.m_user.Nickname}
+                </a>
+             </li>
             <li class="nav-item "> 
             <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('logout', true)">
                 Logout

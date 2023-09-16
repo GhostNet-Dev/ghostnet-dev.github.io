@@ -134,7 +134,10 @@ export class GWSMain {
             bodyTag.innerHTML += `
                     <span class="border rounded m-2">
                     <span class="material-symbols-outlined"> person </span>
-                    <strong class="me-auto">${hon.Id}</strong>
+                    <a href="javascript:void(0)" onclick="ClickLoadPage('hondetail', false, '&email=${hon.Id}')">
+                    <strong class="me-auto">
+                    ${hon.Id}
+                   </strong> </a>
                     <small> ${elapsedTime(Number(hon.Time))}</small>
                     - ${hon.Content}</span>
                         `;

@@ -39,7 +39,7 @@
     <div class="menubar-logo">
         <img src="static/img/ghost_background_black@1x.png" width="40">
     </div>
-    <a class="navbar-brand handcursor" onclick="ClickLoadPage('main', true)">
+    <a class="navbar-brand handcursor" onclick="ClickLoadPage('main', false)">
         <b>GhostWebService</b></a>
     <!--<button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span
@@ -61,9 +61,17 @@
             <li class="nav-item "> <a class="nav-link" href="javascript:void(0)"
                     onclick="ClickLoadPage('hons', true)"><b>Hons</b></a> </li>
             <li class="nav-item "> <a class="nav-link" href="javascript:void(0)"
-                    onclick="ClickLoadPage('blockscan', true)">Blockchain</a> </li>
+                    onclick="ClickLoadPage('blockscan', true)">NFT</a> </li>
             <li class="nav-item "> <a class="nav-link" href="javascript:void(0)"
-                    onclick="ClickLoadPage('download', true)">Download</a> </li>
+                    onclick="ClickLoadPage('blockscan', true)">Prompt</a> </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">Blockchain</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="javascript:void(0)" onclick="ClickLoadPage('blockscan', true)">Block List</a>
+                    <a class="dropdown-item" href="javascript:void(0)" onclick="ClickLoadPage('download', true)">Download</a>
+                </div>
+            </li>
         </ul>
     </div>
     <div class="collapse navbar-collapse flex-grow-0" style="margin-left:auto;" id="navbarNavRight">
