@@ -80,9 +80,6 @@ export class Hons {
         const addr = masterAddr + "/glambda?txid=" + encodeURIComponent(HonsTxId);
         fetch(addr, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
             body: JSON.stringify({
                 Table: "feeds",
                 Start: 0,

@@ -76,14 +76,8 @@ export class BlockStore {
         const promise = (range == null) ?
             fetch(window.MasterAddr + "/blocks", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                }
             }) : fetch(window.MasterAddr + "/blocks", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
                 body: JSON.stringify(range)
             });
         return promise.then((response) => response.json())
