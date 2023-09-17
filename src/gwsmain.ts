@@ -5,7 +5,7 @@ import { Hons, HonEntry} from "./hons/hons.js";
 
 const MaxInfoViewCnt = 5;
 
-type LatestTx = { Id: string, AddCoin: number, Nickname: string, TotalCoin: number };
+type LatestTx = { Id: string, TxId: string, AddCoin: number, Nickname: string, TotalCoin: number };
 
 export class GWSMain {
     m_blockInfos: BlockInfoParam[];
@@ -56,7 +56,7 @@ export class GWSMain {
                 <div class="col-1 align-middle"><span class="material-symbols-outlined"> 
                 toll </span>
                 </div>
-                <div class="col">${ret.Id}</div>
+                <div class="col maxtext">${ret.TxId}</div>
                 <div class="col font-weight-bold text-success">+ ${calcGCoin(ret.AddCoin)}</div>
                 <div class="col text-right">${ret.Nickname} master<br>
                     ${calcGCoin(ret.TotalCoin)} GCoin</div>
@@ -75,6 +75,7 @@ export class GWSMain {
                         this.m_blockStore.RequestAccount(tx.Body.Vout[0].Addr)
                             .then(accountParam => {
                                 results.push({Id: blockInfo.Header.Id,
+                                    TxId: tx.TxId,
                                     AddCoin: parseInt(tx.Body.Vout[0].Value),
                                     Nickname: accountParam.Nickname,
                                     TotalCoin: accountParam.Coin
