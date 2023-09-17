@@ -72,14 +72,10 @@ export class BlockStore {
         return fetch(window.MasterAddr + `/blockdetail?blockid=${blockId}`)
             .then((response) => response.json())
     }
-    public RequestBlockList(range: Array<number> | null): Promise<BlockInfoParam[]> {
-        const promise = (range == null) ?
-            fetch(window.MasterAddr + "/blocks", {
-                method: "POST",
-            }) : fetch(window.MasterAddr + "/blocks", {
-                method: "POST",
-                body: JSON.stringify(range)
-            });
+    public RequestBlockList(start: number, count: number): Promise<BlockInfoParam[]> {
+        const promise = 
+            fetch(window.MasterAddr + 
+                "/blocks?start=" + start + "&count=" + count);
         return promise.then((response) => response.json())
     }
 

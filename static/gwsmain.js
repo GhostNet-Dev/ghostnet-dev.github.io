@@ -149,7 +149,7 @@ export class GWSMain {
         this.drawHtmlConnectMaster();
         this.m_blockStore.RequestAccountList(0, 20)
             .then((param) => this.drawHtmlAccountList(param));
-        this.m_blockStore.RequestBlockList(null)
+        this.m_blockStore.RequestBlockList(0, 5)
             .then(param => this.drawHtml(param));
         this.drawHtmlNewHons();
         return true;

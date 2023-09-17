@@ -92,20 +92,13 @@ export class BlockInfo {
         }, 250);
     }
 
-    Range(): Array<number> {
-        const requestBlockIds = new Array(PageViewCount);
-        let pos = this.m_minBlockId - 1;
-
-        for (let i = 0; i < PageViewCount && pos > 0; i++, pos--) {
-            requestBlockIds[i] = pos;
-        }
-
-        return requestBlockIds
+    Range(): number {
+        return this.m_minBlockId - 1;
     }
 
     fetchBlockInfo(): Promise<void> {
-        const range = (this.m_minBlockId == MaxUnsignedInt) ? null:this.Range();
-        return this.m_blockStore.RequestBlockList(range)
+        const range = (this.m_minBlockId == MaxUnsignedInt) ? 0:this.Range();
+        return this.m_blockStore.RequestBlockList(range, 15)
             .then((list) => {
                 if (range == null) {
                     this.reloadBlockInfo(list);

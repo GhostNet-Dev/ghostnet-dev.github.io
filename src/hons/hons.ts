@@ -77,15 +77,9 @@ export class Hons {
         this.m_masterAddr = window.MasterAddr;
         const masterAddr = this.m_masterAddr;
         const user = this.m_session.GetHonUser();
-        const addr = masterAddr + "/glambda?txid=" + encodeURIComponent(HonsTxId);
-        fetch(addr, {
-            method: "POST",
-            body: JSON.stringify({
-                Table: "feeds",
-                Start: 0,
-                Count: n,
-            })
-        })
+        const addr = `
+        ${masterAddr}/glambda?txid=${HonsTxId}&Table=feeds&Start=0&Count=${n}`;
+        fetch(addr)
             .then((response) => response.json())
             .then((result) => this.honsResult(result))
             .then((keys)=> this.RequestHon(keys, callback))
