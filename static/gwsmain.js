@@ -134,7 +134,7 @@ export class GWSMain {
             bodyTag.innerHTML += `
                     <span class="border rounded m-2">
                     <span class="material-symbols-outlined"> person </span>
-                    <a href="javascript:void(0)" onclick="ClickLoadPage('hondetail', false, '&email=${hon.Id}')">
+                    <a href="javascript:void(0)" onclick="ClickLoadPage('hondetail', false, '&email=${hon.Email}')">
                     <strong class="me-auto">
                     ${hon.Id}
                    </strong> </a>

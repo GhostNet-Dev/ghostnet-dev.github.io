@@ -17,20 +17,15 @@
                                     <button type="button" class="btn btn-primary btn-sm">팔로우</button>
                                 </div>
 
-                                <a title="{{userInfo.GhostNickname}}" href="/user/{{userInfo.PubKeyAddress}}"
+                                <a href="/user/{{userInfo.PubKeyAddress}}"
                                     class="twPc-avatarLink">
                                     <img alt="{{userInfo.GhostNickname}}"
-                                        src="{% static 'img/ghost_background_black.png' %}" class="twPc-avatarImg">
+                                        src="static/img/ghost_background_black.png" class="twPc-avatarImg">
                                 </a>
 
                                 <div class="twPc-divUser">
-                                    <div class="twPc-divName">
-                                        <a href="/user/{{userInfo.PubKeyAddress}}">{{userInfo.GhostNickname}}</a>
-                                    </div>
-                                    <span>
-                                        <a
-                                            href="/user/{{userInfo.PubKeyAddress}}">@<span>{{userInfo.PubKeyAddress}}</span></a>
-                                    </span>
+                                    <div class="twPc-divName" id="nickname"> </div>
+                                    <span id="email"> </span>
                                 </div>
 
                                 <div class="twPc-divStats">
@@ -132,6 +127,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col">
             <div class="p-3 mb-2 text-dark rounded" style="background-color:#f7f9f9;">
                 <b>Market</b>

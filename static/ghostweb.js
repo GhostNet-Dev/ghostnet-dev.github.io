@@ -29,6 +29,8 @@ const funcMap = {
 };
 const urlToFileMap = {
     "main": "ghostnetservice/main.html",
+    "nft": "ghostnetservice/warning.html",
+    "prompt": "ghostnetservice/warning.html",
     "download": "ghostnetservice/download.html",
     "signin": "hons/signin.html",
     "signup": "hons/signup.html",

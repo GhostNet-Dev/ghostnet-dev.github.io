@@ -1,6 +1,6 @@
 export type HonUser = {
     Email: string,
-    Nickname: String,
+    Nickname: string,
     Password: string,
 }
 

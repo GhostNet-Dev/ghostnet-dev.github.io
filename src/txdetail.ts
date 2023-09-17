@@ -95,8 +95,6 @@ export class TxDetail {
         this.drawHtmlOutput(param.Tx.Body.Vout);
     }
 
-    
-
     getTxIdParam(): string | null {
         const urlParams = new URLSearchParams(window.location.search);
         const txId = encodeURIComponent(urlParams.get("txid")??"");
