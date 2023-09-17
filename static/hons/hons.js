@@ -46,18 +46,10 @@ export class Hons {
         `;
     }
     RequestHon(keys, callback) {
-        const addr = this.m_masterAddr + "/glambda?txid=" + encodeURIComponent(HonTxId);
+        const addr = this.m_masterAddr + "/glambda?txid=" +
+            encodeURIComponent(HonTxId) + "&Table=feeds&key=";
         keys.forEach((key) => {
-            fetch(addr, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    Table: "feeds",
-                    key: atob(key),
-                })
-            })
+            fetch(addr + atob(key))
                 .then((response) => response.json())
                 .then((result) => callback(result));
         });
@@ -67,7 +59,7 @@ export class Hons {
         const masterAddr = this.m_masterAddr;
         const user = this.m_session.GetHonUser();
         const addr = `
-        ${masterAddr}/glambda?txid=${HonsTxId}&Table=feeds&Start=0&Count=${n}`;
+        ${masterAddr}/glambda?txid=${encodeURIComponent(HonsTxId)}&Table=feeds&Start=0&Count=${n}`;
         fetch(addr)
             .then((response) => response.json())
             .then((result) => this.honsResult(result))
