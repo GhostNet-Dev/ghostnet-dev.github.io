@@ -155,8 +155,29 @@ export class GWSMain {
                         `;
         });
     }
+    sendToModel() {
+        const btn = document.getElementById("ghostchat") as HTMLButtonElement
+        if (btn == null) return;
+        const result = document.getElementById("gptresult")
+        if (result == null) return;
+        const input = document.getElementById("prompt") as HTMLInputElement
+        const prompt = input?.value;
+        result.innerHTML = `<div class="spinner-grow" role="status">
+            <span class="sr-only">Loading...</span> </div> `
+        btn.disabled = true;
+        return fetch(`http://220.149.235.237:8001/prompt/${prompt}`)
+            .then((response) => response.json())
+            .then((text)=>{
+                console.log(text);
+                result.innerHTML = text.message;
+                btn.disabled = false;
+            });
+    }
     public Run(masterAddr: string): boolean {
         this.init();
+
+        const btn = document.getElementById("ghostchat") as HTMLButtonElement
+        btn.onclick = () => this.sendToModel();
 
         this.drawHtmlConnectMaster();
         this.m_blockStore.RequestAccountList(0, 20)

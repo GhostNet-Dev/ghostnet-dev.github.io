@@ -8,11 +8,29 @@
 <div class="container my-3">
     <div class="row">
         <div class="col text-center">
-        <img src="static/img/overview.png" class="img-fluid mx-auto"><br><br>
+        <img src="static/img/overview.png" style="min-width: 200px;" class="img-fluid mx-auto"><br><br>
         </div>
         <div class="col align-self-center">
             <h3>Experience Open Resources through<br>GhostWebService 3.0</h3>
             Decentralized Cloud Service using Blockchain
+        </div>
+    </div>
+</div>
+<div class="container my-3">
+    <div class="row">
+        <div class="col text-center" id="gptresult">
+            </div>
+        </div>
+    <div class="row">
+        <div class="col text-center">
+            <div class="input-group mb-3">
+            <input type="text" class="form-control" id="prompt">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="ghostchat">Send to Ghost</button>
+            </div>
+                    </div>
+                <small id="help" class="form-text text-muted">
+                    llama-2-13b. prompt to send to the model: text-generation</small>
         </div>
     </div>
 </div>
