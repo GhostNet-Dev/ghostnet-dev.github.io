@@ -1,5 +1,5 @@
 import { elapsedTime, calcGCoin } from "./utils.js";
-const PageViewCount = 10;
+const PageViewCount = 20;
 const MaxUnsignedInt = ((1 << 31) >>> 0); // unsigned int max
 export class BlockInfo {
     constructor(blockStore) {
@@ -84,7 +84,7 @@ export class BlockInfo {
     }
     fetchBlockInfo() {
         const range = (this.m_minBlockId == MaxUnsignedInt) ? 0 : this.Range();
-        return this.m_blockStore.RequestBlockList(range, 15)
+        return this.m_blockStore.RequestBlockList(range, PageViewCount)
             .then((list) => {
             if (range == null) {
                 this.reloadBlockInfo(list);
