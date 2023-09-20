@@ -125,7 +125,9 @@ export class GWSMain {
         if (bodyTag == null)
             return;
         console.log(window.MasterNode);
-        bodyTag.innerHTML = `<b>Connected Master</b> - ${window.MasterNode.User.Nickname}`;
+        bodyTag.innerHTML = `<b>Connected Master</b> - 
+        ${window.MasterNode.User.Nickname}, <b>Online Nodes </b>
+        ${window.NodeCount}`;
     }
     drawHtmlNewHons() {
         const bodyTag = document.getElementById('newhon');

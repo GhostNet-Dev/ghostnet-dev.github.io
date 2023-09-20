@@ -30,6 +30,7 @@ declare global {
         NavExpended: () => void;
         MasterAddr: string;
         MasterNode: GhostWebUser;
+        NodeCount: number;
     }
 }
 
@@ -126,6 +127,7 @@ window.onpopstate = (event) => {
 
 const parseResponse = (nodes: GhostWebUser[]) => {
     let randIdx = Math.floor(Math.random() * nodes.length);
+    window.NodeCount = nodes.length;
     console.log(nodes);
     return nodes[randIdx];
 };
