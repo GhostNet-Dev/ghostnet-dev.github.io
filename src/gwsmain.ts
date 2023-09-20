@@ -171,8 +171,15 @@ export class GWSMain {
             .then((response) => response.json())
             .then((text)=>{
                 console.log(text);
-                result.innerHTML = text.message;
+                if ("message" in text){
+                    result.innerHTML = text.message;
+                } else {
+                    result.innerHTML = text.detail+" - 개발자가 뭔가 하고 있나봅니다...";
+                }
                 btn.disabled = false;
+            })
+            .catch(()=>{
+                result.innerHTML = "개발자가 뭔가 하고 있나봅니다...";
             });
     }
     public Run(masterAddr: string): boolean {
