@@ -30,7 +30,10 @@ export class BlockInfo {
         const linkText = `ClickLoadPage("blockdetail", false, "&blockid=${blockInfo.Header.Id}")`;
         newCell1.setAttribute('onclick', linkText);
         newCell1.setAttribute('class', 'handcursor');
-        newCell1.innerHTML = `${blockInfo.Header.Id}`;
+        newCell1.setAttribute('class', 'align-middle');
+        newCell1.innerHTML = `
+            <span class="material-symbols-outlined"> stack </span>
+            ${blockInfo.Header.Id}`;
         newCell2.setAttribute('onclick', linkText);
         newCell2.setAttribute('class', 'handcursor');
         newCell2.innerText = `${elapsedTime(Number(blockInfo.Header.TimeStamp) * 1000)}`;

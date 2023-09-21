@@ -57,9 +57,10 @@ export class GWSMain {
                 toll </span>
                 </div>
                 <div class="col maxtext">${ret.TxId}</div>
-                <div class="col font-weight-bold text-success">+ ${calcGCoin(ret.AddCoin)}</div>
-                <div class="col text-right">${ret.Nickname} master<br>
+                <div class="col">
+                <span class="text-success font-weight-bold">+ ${calcGCoin(ret.AddCoin)}</span><br>
                     ${calcGCoin(ret.TotalCoin)} GCoin</div>
+                <div class="col text-right">${ret.Nickname} master</div>
             </div>${line}
                             `;
         })
