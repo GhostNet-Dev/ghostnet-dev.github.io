@@ -1,4 +1,4 @@
-import { elapsedTime, calcGCoin } from "./utils.js";
+import { elapsedTime, calcGCoin } from "./utils";
 const MaxInfoViewCnt = 5;
 export class GWSMain {
     constructor(blockStore, hons) {

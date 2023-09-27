@@ -4,6 +4,13 @@ export class BlockStore {
         this.m_minBlockId = MaxUnsignedInt;
         this.blockInfos = new Array();
         this.m_accountMap = new Map();
+        this.m_masterNodes = new Array();
+    }
+    AddMasters(nodes) {
+        this.m_masterNodes = nodes;
+    }
+    GetMasters() {
+        return this.m_masterNodes;
     }
     GetAccount(nick) {
         return this.m_accountMap.get(nick);

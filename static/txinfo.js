@@ -1,4 +1,4 @@
-import { elapsedTime } from "./utils.js";
+import { elapsedTime } from "./utils";
 export class TxInfo {
     constructor(blockStore) {
         this.blockStore = blockStore;

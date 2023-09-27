@@ -1,4 +1,4 @@
-import { elapsedTime, calcGCoin } from "./utils.js";
+import { elapsedTime, calcGCoin } from "./utils";
 const PageViewCount = 20;
 const MaxUnsignedInt = ((1 << 31) >>> 0); // unsigned int max
 export class BlockInfo {

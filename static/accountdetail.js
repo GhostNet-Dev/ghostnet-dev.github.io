@@ -1,5 +1,5 @@
-import { calcGCoin } from "./utils.js";
-import { TxOutputTypeStr } from "./models/tx.js";
+import { calcGCoin } from "./utils";
+import { TxOutputTypeStr } from "./models/tx";
 export class AccountDetail {
     constructor(blockStore) {
         this.blockStore = blockStore;

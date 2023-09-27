@@ -1,5 +1,5 @@
 import { GhostNetBlock } from "./models/block.js";
-import { TxInfoParam, BlockInfoParam, AccountParam } from "./models/param";
+import { TxInfoParam, BlockInfoParam, AccountParam, GhostWebUser } from "./models/param";
 import { PrevOutputParam, TxOutputType } from "./models/tx.js";
 
 const MaxUnsignedInt = ((1 << 31) >>> 0); // unsigned int max
@@ -8,12 +8,21 @@ export class BlockStore {
     blockInfos: BlockInfoParam[];
     m_minBlockId: number;
     m_accountMap: Map<string, AccountParam>;
+    m_masterNodes: GhostWebUser[];
 
     public constructor() {
         this.m_minBlockId = MaxUnsignedInt;
         this.blockInfos = new Array<BlockInfoParam>();
         this.m_accountMap = new Map<string, AccountParam>();
+        this.m_masterNodes = new Array<GhostWebUser>();
     }
+
+    public AddMasters(nodes: GhostWebUser[]) {
+        this.m_masterNodes = nodes;
+    }
+    public GetMasters() :GhostWebUser[] {
+        return this.m_masterNodes;
+    } 
 
     public GetAccount(nick:string): AccountParam|undefined {
         return this.m_accountMap.get(nick);
