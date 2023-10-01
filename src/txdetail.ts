@@ -1,7 +1,7 @@
-import { TxInfoParam } from "./models/param";
-import { calcGCoin} from "./utils";
-import { GhostTransaction, TxInput, TxOutput, TxOutputType, TxOutputTypeStr } from "./models/tx";
-import { BlockStore } from "./store";
+import { TxInfoParam } from "./models/param.js";
+import { calcGCoin} from "./utils.js";
+import { GhostTransaction, TxInput, TxOutput, TxOutputType, TxOutputTypeStr } from "./models/tx.js";
+import { BlockStore } from "./store.js";
 
 export class TxDetail {
     m_masterAddr:string;

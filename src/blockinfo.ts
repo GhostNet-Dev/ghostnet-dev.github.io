@@ -1,6 +1,6 @@
-import { elapsedTime, calcGCoin} from "./utils";
-import { BlockStore } from "./store";
-import { BlockInfoParam } from "./models/param";
+import { elapsedTime, calcGCoin} from "./utils.js";
+import { BlockStore } from "./store.js";
+import { BlockInfoParam } from "./models/param.js";
 
 const PageViewCount = 20;
 const MaxUnsignedInt = ((1 << 31) >>> 0); // unsigned int max

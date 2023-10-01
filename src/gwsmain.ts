@@ -1,7 +1,7 @@
-import { elapsedTime, calcGCoin } from "./utils";
-import { AccountParam, BlockInfoParam } from "./models/param";
-import { BlockStore } from "./store";
-import { Hons, HonEntry} from "./hons/hons";
+import { elapsedTime, calcGCoin } from "./utils.js";
+import { AccountParam, BlockInfoParam } from "./models/param.js";
+import { BlockStore } from "./store.js";
+import { Hons, HonEntry} from "./hons/hons.js";
 
 const MaxInfoViewCnt = 5;
 

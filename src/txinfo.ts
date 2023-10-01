@@ -1,7 +1,7 @@
-import { elapsedTime } from "./utils";
-import { GhostNetBlock } from "./models/block";
-import { GhostTransaction } from "./models/tx";
-import { BlockStore } from "./store";
+import { elapsedTime } from "./utils.js";
+import { GhostNetBlock } from "./models/block.js";
+import { GhostTransaction } from "./models/tx.js";
+import { BlockStore } from "./store.js";
 type DataContext = { Title: string, Content: string };
 
 export class TxInfo {

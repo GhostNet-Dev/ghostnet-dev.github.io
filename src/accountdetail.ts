@@ -1,7 +1,7 @@
-import { AccountParam } from "./models/param";
-import { calcGCoin } from "./utils";
-import { PrevOutputParam, TxOutputType, TxOutputTypeStr } from "./models/tx";
-import { BlockStore } from "./store";
+import { AccountParam } from "./models/param.js";
+import { calcGCoin } from "./utils.js";
+import { PrevOutputParam, TxOutputType, TxOutputTypeStr } from "./models/tx.js";
+import { BlockStore } from "./store.js";
 
 export class AccountDetail {
     m_masterAddr:string;
