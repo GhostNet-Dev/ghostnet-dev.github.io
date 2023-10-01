@@ -5,6 +5,13 @@ export class BlockStore {
         this.blockInfos = new Array();
         this.m_accountMap = new Map();
         this.m_masterNodes = new Array();
+        this.m_gwsFilename = "";
+    }
+    SetGWSPath(filename) {
+        this.m_gwsFilename = filename;
+    }
+    GetGWSPath() {
+        return this.m_gwsFilename;
     }
     AddMasters(nodes) {
         this.m_masterNodes = nodes;

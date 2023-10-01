@@ -9,12 +9,22 @@ export class BlockStore {
     m_minBlockId: number;
     m_accountMap: Map<string, AccountParam>;
     m_masterNodes: GhostWebUser[];
+    m_gwsFilename: string;
 
     public constructor() {
         this.m_minBlockId = MaxUnsignedInt;
         this.blockInfos = new Array<BlockInfoParam>();
         this.m_accountMap = new Map<string, AccountParam>();
         this.m_masterNodes = new Array<GhostWebUser>();
+        this.m_gwsFilename = "";
+    }
+
+    public SetGWSPath(filename: string) {
+        this.m_gwsFilename = filename;
+    }
+
+    public GetGWSPath(): string {
+        return this.m_gwsFilename;
     }
 
     public AddMasters(nodes: GhostWebUser[]) {
