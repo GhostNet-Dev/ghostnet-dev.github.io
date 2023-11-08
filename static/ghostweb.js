@@ -4,6 +4,9 @@ import { BlockStore } from "./store.js";
 import { TxDetail } from "./txdetail.js";
 import { GWSMain } from "./gwsmain.js";
 import { AccountDetail } from "./accountdetail.js";
+import { WebAppStore } from "./webappstore.js";
+import { Diffusion } from "./diffusion/diffusion.js";
+import { Socket } from "./libs/socket.js";
 import { HonDetail } from "./hons/hondetail.js";
 import { Hons } from "./hons/hons.js";
 import { Hon } from "./hons/hon.js";
@@ -28,12 +31,16 @@ const funcMap = {
     "blockdetail": new TxInfo(blockStore),
     "blockscan": new BlockInfo(blockStore),
     "accountdetail": new AccountDetail(blockStore),
+    "webappstore": new WebAppStore(blockStore),
+    "diffusion": new Diffusion(blockStore, new Socket),
 };
 const urlToFileMap = {
     "main": "ghostnetservice/main.html",
     "nft": "ghostnetservice/warning.html",
     "prompt": "ghostnetservice/warning.html",
     "download": "ghostnetservice/download.html",
+    "webappstore": "ghostnetservice/webappstore.html",
+    "diffusion": "diffusion/diffusion.html",
     "signin": "hons/signin.html",
     "signup": "hons/signup.html",
     "hons": "hons/hons.html",
@@ -107,6 +114,7 @@ const parseResponse = (nodes) => {
 const loadNodesHtml = (node) => {
     window.MasterNode = node;
     window.MasterAddr = `http://${node.User.ip.Ip}:${node.User.ip.Port}`;
+    window.MasterWsAddr = `ws://${node.User.ip.Ip}:${node.User.ip.Port}`;
     return window.MasterAddr;
 };
 const includeHTML = (id, filename) => {

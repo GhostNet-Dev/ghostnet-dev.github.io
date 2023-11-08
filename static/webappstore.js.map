@@ -1,0 +1,1 @@
+{"version":3,"file":"webappstore.js","sourceRoot":"","sources":["../src/webappstore.ts"],"names":[],"mappings":"AAEA,MAAM,OAAO,WAAW;IACpB,YAA2B,UAAsB;QAAtB,eAAU,GAAV,UAAU,CAAY;IACjD,CAAC;IAEM,GAAG,CAAC,UAAkB;QACzB,OAAO,IAAI,CAAC;IAChB,CAAC;IAEM,OAAO,KAAW,CAAC;CAC7B"}

@@ -5,8 +5,10 @@ export class BlockStore {
         this.blockInfos = new Array();
         this.m_accountMap = new Map();
         this.m_masterNodes = new Array();
-        this.m_gwsFilename = "";
+        this.m_ip = this.m_gwsFilename = "";
     }
+    SetPublicIp(ip) { this.m_ip = ip; }
+    GetPublicIp() { return this.m_ip; }
     SetGWSPath(filename) {
         this.m_gwsFilename = filename;
     }
