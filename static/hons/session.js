@@ -10,24 +10,20 @@ export class Session {
             return;
         if (this.m_signinFlag) {
             seInfo.innerHTML = `
-            <li class="nav-item "> 
-                <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('hondetail', true, "&email=${this.m_user.Email}")">
+                <a href="javascript:void(0)" onclick="ClickLoadPage('hondetail', true, "&email=${this.m_user.Email}")">
                     ${this.m_user.Nickname}
-                </a>
-             </li>
-            <li class="nav-item "> 
-            <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('logout', true)">
+                </a> / 
+            <a href="javascript:void(0)" onclick="ClickLoadPage('logout', true)">
                 Logout
             </a> 
-            </li>
             `;
         }
         else {
             seInfo.innerHTML = `
-            <li class="nav-item "> <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('signin', true)">Sign
-                    In</a> </li>
-            <li class="nav-item "> <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('signup', true)">Sign
-                    Up</a> </li>
+            <a href="javascript:void(0)" onclick="ClickLoadPage('signin', true)">Sign In
+            </a> / <a
+                href="javascript:void(0)" onclick="ClickLoadPage('signup', true)">Sign Up</a>
+
 
             `;
         }

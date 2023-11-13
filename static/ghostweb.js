@@ -40,6 +40,8 @@ const urlToFileMap = {
     "prompt": "ghostnetservice/warning.html",
     "download": "ghostnetservice/download.html",
     "webappstore": "ghostnetservice/webappstore.html",
+    "service": "ghostnetservice/service.html",
+    "doc": "ghostnetservice/doc.html",
     "diffusion": "diffusion/diffusion.html",
     "signin": "hons/signin.html",
     "signup": "hons/signup.html",

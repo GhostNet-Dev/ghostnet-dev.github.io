@@ -18,9 +18,9 @@ export class Diffusion {
     }
     generateImage() {
         const promptTag = document.getElementById("prompt");
-        const prompt = promptTag.value;
+        const prompt = promptTag.value.toLowerCase();
         const npromptTag = document.getElementById("nprompt");
-        const nprompt = npromptTag.value;
+        const nprompt = npromptTag.value.toLowerCase();
         const heightTag = document.getElementById("height");
         const height = heightTag.value;
         const widthTag = document.getElementById("width");
@@ -32,7 +32,7 @@ export class Diffusion {
         const printTag = document.getElementById("printImg");
         printTag.innerHTML = `
             <div class="spinner-grow text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+                <span class="visually-hidden"></span>
             </div>
         `;
         this.m_ipc.SendMsg("generateImage", prompt, nprompt, height, width, step, seed);

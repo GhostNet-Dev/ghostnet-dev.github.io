@@ -60,40 +60,45 @@
             </li>
         -->
                 <li class="nav-item ">
-                    <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('nft', true)">Doc</a>
+                    <a class="nav-link" href="javascript:void(0)" 
+                    onclick="ClickLoadPage('doc', true)">Docs</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('blockscan', true)">BlockChain</a>
+                    <a class="nav-link" href="javascript:void(0)" 
+                    onclick="ClickLoadPage('service', true)">Services</a>
                 </li>
                 <li class="nav-item ">
-                    <a class="nav-link" href="javascript:void(0)" onclick="ClickLoadPage('nft', true)">NFT</a>
+                    <a class="nav-link" href="javascript:void(0)"
+                        onclick="ClickLoadPage('blockscan', true)">BlockChain</a>
                 </li>
-
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">Download ▾</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="javascript:void(0)"
-                            onclick="ClickLoadPage('download', true)">Linux</a>
+                            onclick="ClickLoadPage('download_win', true)">Windows</a>
                         <a class="dropdown-item" href="javascript:void(0)"
-                            onclick="ClickLoadPage('download', true)">Windows</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">GhostStore ▾</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="javascript:void(0)"
-                            onclick="ClickLoadPage('webappstore', true)">WebApp List</a>
-                        <a class="dropdown-item" href="javascript:void(0)"
-                            onclick="ClickLoadPage('hons', true)"><b>Hons</b></a>
-                        <a class="dropdown-item" href="javascript:void(0)"
-                            onclick="ClickLoadPage('diffusion', true)">Generate Image</a>
+                            onclick="ClickLoadPage('download', true)">Others</a>
                     </div>
                 </li>
             </ul>
         </div>
         <div class="collapse navbar-collapse flex-grow-0" style="margin-left:auto;" id="navbarNavRight">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">GhostWebAppStore ▾</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="javascript:void(0)"
+                            onclick="ClickLoadPage('webappstore', true)"><b>WebApp List</b></a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="ClickLoadPage('hons', true)">Hons
+                            (SNS)</a>
+                        <a class="dropdown-item" href="javascript:void(0)"
+                            onclick="ClickLoadPage('diffusion', true)">Generate Image</a>
+                    </div>
+                </li>
+            </ul>
+            <!--
             <ul class="navbar-nav" id="sessioninfo">
                 <li class="nav-item "> <a class="nav-link" href="javascript:void(0)"
                         onclick="ClickLoadPage('signin', true)">Sign
@@ -102,6 +107,7 @@
                         onclick="ClickLoadPage('signup', true)">Sign
                         Up</a> </li>
             </ul>
+            -->
         </div>
     </div>
 </nav>
