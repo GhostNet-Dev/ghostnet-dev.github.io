@@ -1,13 +1,51 @@
 <div class="container my-3">
     <div class="row division-line">
         <div class="col">
-            <h4>Services</h4>
+            <h3>Services</h3>
         </div>
     </div>
     <div class="row">
         <div class="col m-3">
-            <h5> Ghost Lamda </h5>
-
+            <h4> GLambda </h4>
+            GLamda는 web에서 실행할 수 있는 코드 조각입니다. 
+            GWS(GhostWebService)의 모든 서비스를 GLambda를 통해 실행할 수 있습니다. 
+            GWS는 서비스 고도화를 위해 몇가지 웹앱을 운영하고 있습니다. 
+            GLambda를 통해 Key-Value Store, LLM, Stable Diffusion 같은 다양한 서비스를 호출할 수 있습니다.
+            <h5> Script </h5>
+            Javascript와 유사한 문법을 사용합니다. 아직 script engine은 개발 버전으로써 완벽하지 않습니다.
+            다음 API를 지원하고 있습니다.
+            <ul>
+                <li>gwsGetParam()</li>
+                <li>gwsLoadKeyValue(table, key)</li>
+                <li>gwsSaveKeyValue(table, key, value)</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col m-3">
+            <h4> Key-Value Store </h4>
+            Key-Value Store를 지원합니다. Key는 해시화되어 node에 분산 저장됩니다. 
+            동일한 Key가 다시 사용될 경우 기존 Data는 사라집니다. 블록체인 특성상 Data는 Open되어 있습니다.
+            민감한 Data는 별도의 DB 서비스를 이용하시길 바랍니다. 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col m-3">
+            <h4> LLM (Generative AI) </h4>
+            Open Source로 공개된 llama.cpp를 활용하고 Model은 Meta에서 공개된 13B 모델을 사용하고 있습니다.
+            개발자가 열심히 공부 중이니 곧 한글화된 llama를 사용할 수 있도록 하겠습니다.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col m-3">
+            <h4> Stable Diffusion (Generative AI) </h4>
+            Open Source로 공개된 ncnn 라이브러리를 사용하고 있습니다. 개발자가 열심히 공부중입니다.
+        </div>
+    </div>
+    <div class="row">
+        <div class="col m-3">
+            <h4> NFT 제작 및 거래</h4>
+            GhostNet Blockchain의 기능을 활용하요 NFT를 만들고 거래할 수 있도록 인터페이스를 제공합니다.
         </div>
     </div>
 </div>
