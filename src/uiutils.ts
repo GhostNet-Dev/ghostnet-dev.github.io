@@ -3,16 +3,8 @@ import { includeContentHTML, includeHTML, parseResponse, loadNodesHtml } from ".
 const tag = document.getElementById("contents");
 if (tag != null) {
     if (location.protocol != 'http:') {
-        tag.innerHTML = `
-            <div class="card">
-                <div class="card-header"> 
-                    https 를 지원하지 않습니다. 
-                </div>
-                <div class="card-body">
-                    <a href="http://ghostwebservice.com"> <strong class="me-auto">ghostwebservice.com</strong> </a>
-                </div>
-            </div>
-        `;
+        tag.innerHTML = errmsg(` https 를 지원하지 않습니다.`, 
+            `링크를 클릭해주세요. <a href="http://ghostwebservice.com"> <strong class="me-auto">ghostwebservice.com</strong> </a> `);
     } else {
         addEventListener("load", () =>
             fetch("http://ghostnetroot.com:58080/nodes")
@@ -36,18 +28,29 @@ if (tag != null) {
                     })
                 })
                 .catch(() => {
-                    tag.innerHTML = `
-            <div class="card">
-                <div class="card-header"> 
-                Network Down
-                </div>
-                <div class="card-body">
-                    사용가능한 Node가 존재하지 않습니다. 
-                </div>
-            </div>
-        `;
+                    tag.innerHTML = errmsg(` Network Down`, ` 사용가능한 Node가 존재하지 않습니다.`);
                 }));
     }
+}
+
+function errmsg(title: string, content: string): string {
+    return `
+<div class="container my-3">
+    <div class="row division-line">
+        <div class="col">
+            <h4>Notics</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center"> <br>
+            <div class="card">
+                <div class="card-header"> ${title} </div>
+                <div class="card-body"> ${content} </div>
+            </div>
+</div>
+    </div>
+</div>
+        `;
 }
 
 
