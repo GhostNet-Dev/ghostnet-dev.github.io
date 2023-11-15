@@ -61,6 +61,7 @@ const urlToFileMap: UrlMap = {
     "nft": "ghostnetservice/warning.html",
     "prompt": "ghostnetservice/warning.html",
     "download": "ghostnetservice/download.html",
+    "download_win": "ghostnetservice/download_win.html",
     "webappstore": "ghostnetservice/webappstore.html",
     "service": "ghostnetservice/service.html",
     "doc": "ghostnetservice/doc.html",
