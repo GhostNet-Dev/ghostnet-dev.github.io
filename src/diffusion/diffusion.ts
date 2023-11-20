@@ -20,7 +20,7 @@ export class Diffusion {
         ipc.RegisterMsgHandler('reply_generateImage', (filename: string) => {
             const printTag = document.getElementById("printImg") as HTMLDivElement;
             printTag.innerHTML = `
-                <img src="${window.MasterAddr}/image?filename=${filename}">
+                <img src="${window.MasterAddr}/image?filename=${filename}" class="img-fluid">
             `;
         });
     }
@@ -48,6 +48,33 @@ export class Diffusion {
         } else {
             this.m_ipc.SendMsg("generateImage2", prompt, nprompt, height, width, step, seed, this.m_model);
         }
+    }
+
+    heightUpdate(heightTag: HTMLInputElement) {
+        const valueTag = document.getElementById("heightvalue") as HTMLLabelElement
+        valueTag.innerHTML = "Height: " + heightTag.value
+    }
+    widthUpdate(widthTag: HTMLInputElement) {
+        const valueTag = document.getElementById("widthvalue") as HTMLLabelElement
+        valueTag.innerHTML = "Width: " + widthTag.value
+    }
+
+    stepUpdate(stepTag: HTMLInputElement) {
+        const valueTag = document.getElementById("stepvalue") as HTMLLabelElement
+        valueTag.innerHTML = "Step: " + stepTag.value
+    }
+
+    updateEvent() {
+        const heightTag = document.getElementById("height") as HTMLInputElement
+        heightTag.onchange = () => { this.heightUpdate(heightTag) }
+        const widthTag = document.getElementById("width") as HTMLInputElement
+        widthTag.onchange = () => { this.widthUpdate(widthTag) }
+        const stepTag = document.getElementById("step") as HTMLInputElement
+        stepTag.onchange = () => { this.stepUpdate(stepTag) }
+
+        this.heightUpdate(heightTag)
+        this.widthUpdate(widthTag)
+        this.stepUpdate(stepTag)
     }
 
     selectModel(key: string, model: string) {
@@ -78,6 +105,7 @@ export class Diffusion {
         const btn = document.getElementById("generateBtn") as HTMLButtonElement
         btn.onclick = () => this.generateImage();
 
+        this.updateEvent()
         this.drawHtmlUpdateModelList()
         return true;
     }

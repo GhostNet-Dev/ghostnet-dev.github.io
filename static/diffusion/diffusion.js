@@ -13,7 +13,7 @@ export class Diffusion {
         ipc.RegisterMsgHandler('reply_generateImage', (filename) => {
             const printTag = document.getElementById("printImg");
             printTag.innerHTML = `
-                <img src="${window.MasterAddr}/image?filename=${filename}">
+                <img src="${window.MasterAddr}/image?filename=${filename}" class="img-fluid">
             `;
         });
     }
@@ -43,6 +43,29 @@ export class Diffusion {
             this.m_ipc.SendMsg("generateImage2", prompt, nprompt, height, width, step, seed, this.m_model);
         }
     }
+    heightUpdate(heightTag) {
+        const valueTag = document.getElementById("heightvalue");
+        valueTag.innerHTML = "Height: " + heightTag.value;
+    }
+    widthUpdate(widthTag) {
+        const valueTag = document.getElementById("widthvalue");
+        valueTag.innerHTML = "Width: " + widthTag.value;
+    }
+    stepUpdate(stepTag) {
+        const valueTag = document.getElementById("stepvalue");
+        valueTag.innerHTML = "Step: " + stepTag.value;
+    }
+    updateEvent() {
+        const heightTag = document.getElementById("height");
+        heightTag.onchange = () => { this.heightUpdate(heightTag); };
+        const widthTag = document.getElementById("width");
+        widthTag.onchange = () => { this.widthUpdate(widthTag); };
+        const stepTag = document.getElementById("step");
+        stepTag.onchange = () => { this.stepUpdate(stepTag); };
+        this.heightUpdate(heightTag);
+        this.widthUpdate(widthTag);
+        this.stepUpdate(stepTag);
+    }
     selectModel(key, model) {
         this.m_model = model;
         const btn = document.getElementById("dropdownMenu2");
@@ -70,6 +93,7 @@ export class Diffusion {
             this.m_ipc.OpenChannel(window.MasterWsAddr + "/ws");
         const btn = document.getElementById("generateBtn");
         btn.onclick = () => this.generateImage();
+        this.updateEvent();
         this.drawHtmlUpdateModelList();
         return true;
     }
