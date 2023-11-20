@@ -1,4 +1,4 @@
-export class Diffusion {
+export class Llama {
     constructor(blockStore, ipc) {
         this.blockStore = blockStore;
         this.m_blockStore = blockStore;
@@ -75,4 +75,4 @@ export class Diffusion {
     }
     Release() { }
 }
-//# sourceMappingURL=diffusion.js.map
+//# sourceMappingURL=llama.js.map

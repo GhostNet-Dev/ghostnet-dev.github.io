@@ -1,7 +1,7 @@
 import { BlockStore } from "../store.js";
 import { Channel } from "../models/com.js";
 
-export class Diffusion {
+export class Llama {
     m_blockStore: BlockStore;
     m_ipc: Channel;
     m_model: string;

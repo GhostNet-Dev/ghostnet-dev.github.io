@@ -6,6 +6,7 @@ import { GWSMain } from "./gwsmain.js";
 import { AccountDetail } from "./accountdetail.js";
 import { WebAppStore } from "./webappstore.js";
 import { Diffusion } from "./diffusion/diffusion.js";
+import { Llama } from "./llama/llama.js";
 import { Socket } from "./libs/socket.js";
 import { HonDetail } from "./hons/hondetail.js";
 import { Hons } from "./hons/hons.js";
@@ -54,6 +55,7 @@ const funcMap: FuncMap = {
     "accountdetail": new AccountDetail(blockStore),
     "webappstore": new WebAppStore(blockStore),
     "diffusion": new Diffusion(blockStore, new Socket),
+    "llama": new Llama(blockStore, new Socket),
 };
 
 const urlToFileMap: UrlMap = {
@@ -66,6 +68,7 @@ const urlToFileMap: UrlMap = {
     "service": "ghostnetservice/service.html",
     "doc": "ghostnetservice/doc.html",
     "diffusion": "diffusion/diffusion.html",
+    "llama": "llama/llama.html",
     "signin": "hons/signin.html",
     "signup": "hons/signup.html",
     "hons": "hons/hons.html",
