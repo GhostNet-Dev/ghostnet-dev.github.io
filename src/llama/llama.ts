@@ -9,15 +9,15 @@ export class Llama {
         this.m_ipc = ipc;
 
         ipc.RegisterMsgHandler('generateLlamaLog', (log: string) => {
-            const printTag = document.getElementById("log") as HTMLDivElement;
-            printTag.innerHTML += `
+            const logTag = document.getElementById("log") as HTMLDivElement;
+            logTag.innerHTML += `
                 ${log}
             `;
         });
 
         ipc.RegisterMsgHandler('reply_generateLlama', (filename: string) => {
             const printTag = document.getElementById("printImg") as HTMLDivElement;
-            printTag.innerHTML += `
+            printTag.innerHTML = `
             End
             `;
         });
@@ -31,8 +31,11 @@ export class Llama {
                 <span class="visually-hidden"></span>
             </div>
         `;
-        this.m_ipc.SendMsg("llama", prompt);
-        printTag.innerHTML = ``
+        const model = "ggml-model-q4_0.gguf"
+        const length = "512"
+        this.m_ipc.SendMsg("llama", prompt, model, length);
+        const logTag = document.getElementById("log") as HTMLDivElement;
+        logTag.innerHTML = ``
 
     }
 
