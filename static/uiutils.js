@@ -2,7 +2,7 @@ import { includeContentHTML, includeHTML, parseResponse, loadNodesHtml } from ".
 const tag = document.getElementById("contents");
 if (tag != null) {
     if (location.protocol != 'http:') {
-        tag.innerHTML = errmsg(` https 를 지원하지 않습니다.`, `링크를 클릭해주세요. <a href="http://ghostwebservice.com"> <strong class="me-auto">ghostwebservice.com</strong> </a> `);
+        tag.innerHTML = errmsg(` https 를 지원하지 않습니다.`, `링크를 클릭해주세요. <a href="http://ghostwebservice.com" target="_blank"> <strong class="me-auto">http://ghostwebservice.com</strong> </a> `);
     }
     else {
         addEventListener("load", () => fetch("http://ghostnetroot.com:58080/nodes")
