@@ -97,12 +97,18 @@ export class BlockInfo {
             }
         });
     }
+    searchTx() {
+        const tag = document.getElementById('txid');
+        window.ClickLoadPage("txdetail", false, `&txid=${encodeURIComponent(tag.value)}`);
+    }
     Run(target) {
         console.log("blockinfo run");
         this.m_masterAddr = target;
         this.fetchBlockInfo()
             //.then((evt)=> handleScroll())
             .then(() => window.addEventListener("scroll", (ev) => { this.throttle(ev); }));
+        const tag = document.getElementById('searchTx');
+        tag.onclick = () => this.searchTx();
         console.log(this.m_minBlockId);
         return true;
     }

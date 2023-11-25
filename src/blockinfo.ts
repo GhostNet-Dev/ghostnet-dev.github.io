@@ -111,12 +111,20 @@ export class BlockInfo {
             });
     }
 
+    searchTx() {
+        const tag = document.getElementById('txid') as HTMLInputElement;
+        window.ClickLoadPage("txdetail", false, `&txid=${encodeURIComponent(tag.value)}`)
+    }
+
     public Run(target: string): boolean {
         console.log("blockinfo run");
         this.m_masterAddr = target;
         this.fetchBlockInfo()
             //.then((evt)=> handleScroll())
             .then(() => window.addEventListener("scroll", (ev:Event)=>{this.throttle(ev)}));
+        
+        const tag = document.getElementById('searchTx') as HTMLButtonElement;
+        tag.onclick = () => this.searchTx()
 
         console.log(this.m_minBlockId);
         return true;

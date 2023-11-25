@@ -1,4 +1,5 @@
 import { elapsedTime, calcGCoin } from "./utils.js";
+import { TxOutputTypeStr } from "./models/tx.js";
 const MaxInfoViewCnt = 5;
 export class GWSMain {
     constructor(blockStore, hons) {
@@ -40,17 +41,51 @@ export class GWSMain {
             <div class="col"><hr class="py-0 my-0"/></div> </div>` : "";
             bodyTag.innerHTML += `
             <div class="row p-0 m-1">
-                <div class="col-1 align-middle"><span class="material-symbols-outlined"> 
+                <div class="col-1 align-middle">
+                <a onclick='ClickLoadPage("txdetail", false, "&txid=${encodeURIComponent(ret.TxId)}")' class="handcursor">
+                <span class="material-symbols-outlined"> 
                 toll </span>
+                </a>
                 </div>
-                <div class="col maxtext">${ret.TxId}</div>
+                <div class="col maxtext">
+                <a onclick='ClickLoadPage("txdetail", false, "&txid=${encodeURIComponent(ret.TxId)}")' class="handcursor">
+                ${ret.TxId}
+                </a>
+                </div>
                 <div class="col">
+                <a onclick='ClickLoadPage("txdetail", false, "&txid=${encodeURIComponent(ret.TxId)}")' class="handcursor">
                 <span class="text-success font-weight-bold">+ ${calcGCoin(ret.AddCoin)}</span><br>
-                    ${calcGCoin(ret.TotalCoin)} GCoin</div>
-                <div class="col text-right">${ret.Nickname} master</div>
+                    ${ret.Nickname}</a></div>
+                <div class="col text-right">${ret.Type}</div>
             </div>${line}
                             `;
         });
+    }
+    drawBadges(type) {
+        let output = "<span class='badge badge-pill badge-";
+        switch (type) {
+            case 0 /* TxOutputType.None */:
+                output += "secondary'>" + TxOutputTypeStr[type];
+                break;
+            case 1 /* TxOutputType.TxTypeCoinTransfer */:
+                output += "primary'>" + TxOutputTypeStr[type];
+                break;
+            case 2 /* TxOutputType.TxTypeDataStore */:
+                output += "dark'>" + TxOutputTypeStr[type];
+                break;
+            case 3 /* TxOutputType.TxTypeFSRoot */:
+                output += "warning'>" + TxOutputTypeStr[type];
+                break;
+            case 4 /* TxOutputType.TxTypeContract */:
+            case 6 /* TxOutputType.TxTypeScript */:
+                output += "success'>" + TxOutputTypeStr[type];
+                break;
+            case 7 /* TxOutputType.TxTypeScriptStore */:
+                output += "info'>" + TxOutputTypeStr[type];
+                break;
+        }
+        console.log(output);
+        return output + "</span>";
     }
     drawHtmlLatestEarnMaster() {
         const results = new Array();
@@ -58,14 +93,15 @@ export class GWSMain {
             const blockId = parseInt(blockInfo.Header.Id);
             this.m_blockStore.RequestBlock(blockId)
                 .then(block => {
-                block.Alice.forEach(tx => {
+                block.Transaction.forEach(tx => {
                     this.m_blockStore.RequestAccount(tx.Body.Vout[0].Addr)
                         .then(accountParam => {
                         results.push({ Id: blockInfo.Header.Id,
                             TxId: tx.TxId,
                             AddCoin: parseInt(tx.Body.Vout[0].Value),
                             Nickname: accountParam.Nickname,
-                            TotalCoin: accountParam.Coin
+                            TotalCoin: accountParam.Coin,
+                            Type: this.drawBadges(tx.Body.Vout[0].Type)
                         });
                     }).then(() => this.excuteDrawHtmlLatestEarnMaster(results));
                 });
@@ -92,13 +128,20 @@ export class GWSMain {
             this.m_maxBlockId = (blockId > this.m_maxBlockId) ? this.m_maxBlockId = blockId : this.m_maxBlockId;
             bodyTag.innerHTML += `
             <div class="row m-1">
-                <div class="col-1 align-middle"><span class="material-symbols-outlined"> stack </span>
+                <div class="col-1 align-middle">
+                <a onclick='ClickLoadPage("blockdetail", false, "&blockid=${blockId}")' class="handcursor">
+                <span class="material-symbols-outlined"> stack </span></a>
                 </div>
-                 <div class="col">${blockInfo.Header.Id}<br><small>${elapsedTime(Number(blockInfo.Header.TimeStamp) * 1000)}</small>
+                 <div class="col">
+                <a onclick='ClickLoadPage("blockdetail", false, "&blockid=${blockId}")' class="handcursor">
+                 ${blockInfo.Header.Id}<br><small>${elapsedTime(Number(blockInfo.Header.TimeStamp) * 1000)}</small>
+                 </a>
                 </div>
                 <div class="col">
+                <a onclick='ClickLoadPage("blockdetail", false, "&blockid=${blockId}")' class="handcursor">
                     <span>${blockInfo.Header.TransactionCount} txns</span><br>
                     <span>${blockInfo.Header.AliceCount} masters</span>
+                </a>
                 </div>
                 <div class="col text-right">
                     <span id="bminer${blockInfo.Header.Id}">unknown</span>
