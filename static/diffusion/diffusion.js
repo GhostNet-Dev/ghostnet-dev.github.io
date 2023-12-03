@@ -4,6 +4,7 @@ export class Diffusion {
         this.m_blockStore = blockStore;
         this.m_ipc = ipc;
         this.m_model = "UNetModel";
+        this.m_img = new Blob();
         ipc.RegisterMsgHandler('generateLog', (log) => {
             const printTag = document.getElementById("log");
             printTag.innerHTML = `
@@ -11,10 +12,36 @@ export class Diffusion {
             `;
         });
         ipc.RegisterMsgHandler('reply_generateImage', (filename) => {
-            const printTag = document.getElementById("printImg");
-            printTag.innerHTML = `
-                <img src="${window.MasterAddr}/image?filename=${filename}" class="img-fluid">
-            `;
+            fetch(`${window.MasterAddr}/image?filename=${filename}`)
+                .then(response => response.blob())
+                .then(data => {
+                const img = new Blob([data], { type: 'image/bmp' });
+                const imageUrl = URL.createObjectURL(img);
+                const imageElement = new Image();
+                imageElement.src = imageUrl;
+                const container = document.getElementById("printImg");
+                container.innerHTML = "";
+                container.appendChild(imageElement);
+                this.m_img = img;
+            });
+            /*
+        const printTag = document.getElementById("printImg") as HTMLDivElement;
+        printTag.innerHTML = `
+            <img src="${window.MasterAddr}/image?filename=${filename}" class="img-fluid">
+        `;
+        */
+        });
+    }
+    uploadImage() {
+        const formData = new FormData();
+        formData.append("files", this.m_img);
+        formData.append("test", "hello");
+        formData.forEach(entry => console.log(entry));
+        fetch(`${window.MasterAddr}/upload`, {
+            method: "POST",
+            cache: "no-cache",
+            headers: {},
+            body: formData
         });
     }
     generateImage() {
@@ -74,8 +101,8 @@ export class Diffusion {
     drawHtmlUpdateModelList() {
         const models = new Map();
         models.set("UNetModel", "UNetModel");
-        models.set("SD-v1.4", "sd-v1-4-ggml-model-f16.bin");
-        models.set("chiled-remix", "chilled_remix_v2-ggml-model-f16.bin");
+        models.set("SD-v1.4", "sd-v1-4-f16.bin");
+        models.set("chiled-remix", "chilled_reversemix_v2-f16.bin");
         const tag = document.getElementById("modellist");
         if (tag == null)
             return;

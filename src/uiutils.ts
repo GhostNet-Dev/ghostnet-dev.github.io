@@ -7,7 +7,7 @@ if (tag != null) {
             `링크를 클릭해주세요. <a href="http://ghostwebservice.com" target="_blank"> <strong class="me-auto">http://ghostwebservice.com</strong> </a> `);
     } else {
         addEventListener("load", () =>
-            fetch("http://ghostnetroot.com:58080/nodes")
+            fetch("http://lb.ghostnetroot.com:58083/nodes")
                 .then((response) => response.json())
                 .then(parseResponse)
                 .then(loadNodesHtml)
