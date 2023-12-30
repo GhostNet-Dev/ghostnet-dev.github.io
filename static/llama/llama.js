@@ -5,7 +5,7 @@ export class Llama {
         this.m_ipc = ipc;
         ipc.RegisterMsgHandler('generateLlamaLog', (log) => {
             const logTag = document.getElementById("log");
-            logTag.innerHTML += `${log}`;
+            logTag.innerHTML += `${log} `;
         });
         ipc.RegisterMsgHandler('reply_generateLlama', (filename) => {
             const printTag = document.getElementById("printImg");

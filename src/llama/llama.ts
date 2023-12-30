@@ -10,7 +10,7 @@ export class Llama {
 
         ipc.RegisterMsgHandler('generateLlamaLog', (log: string) => {
             const logTag = document.getElementById("log") as HTMLDivElement;
-            logTag.innerHTML += `${log}`;
+            logTag.innerHTML += `${log} `;
         });
 
         ipc.RegisterMsgHandler('reply_generateLlama', (filename: string) => {
