@@ -218,10 +218,16 @@ export class GWSMain {
             result.innerHTML = "개발자가 뭔가 하고 있나봅니다...";
         });
     }
+    searchTx() {
+        const tag = document.getElementById('txid');
+        window.ClickLoadPage("txdetail", false, `&txid=${encodeURIComponent(tag.value)}`);
+    }
     Run(masterAddr) {
         this.init();
-        const btn = document.getElementById("ghostchat");
-        btn.onclick = () => this.sendToModel();
+        //const btn = document.getElementById("ghostchat") as HTMLButtonElement
+        //btn.onclick = () => this.sendToModel();
+        const tag = document.getElementById('searchTx');
+        tag.onclick = () => this.searchTx();
         this.drawHtmlConnectMaster();
         this.m_blockStore.RequestAccountList(0, 20)
             .then((param) => this.drawHtmlAccountList(param));

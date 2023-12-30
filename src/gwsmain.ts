@@ -220,11 +220,18 @@ export class GWSMain {
                 result.innerHTML = "개발자가 뭔가 하고 있나봅니다...";
             });
     }
+    searchTx() {
+        const tag = document.getElementById('txid') as HTMLInputElement;
+        window.ClickLoadPage("txdetail", false, `&txid=${encodeURIComponent(tag.value)}`)
+    }
+
     public Run(masterAddr: string): boolean {
         this.init();
 
-        const btn = document.getElementById("ghostchat") as HTMLButtonElement
-        btn.onclick = () => this.sendToModel();
+        //const btn = document.getElementById("ghostchat") as HTMLButtonElement
+        //btn.onclick = () => this.sendToModel();
+        const tag = document.getElementById('searchTx') as HTMLButtonElement;
+        tag.onclick = () => this.searchTx()
 
         this.drawHtmlConnectMaster();
         this.m_blockStore.RequestAccountList(0, 20)
