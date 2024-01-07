@@ -67,7 +67,7 @@ export class Diffusion {
             this.m_ipc.SendMsg("generateImage", prompt, nprompt, height, width, step, seed);
         }
         else {
-            this.m_ipc.SendMsg("generateImage2", prompt, nprompt, height, width, step, seed, this.m_model, "euler");
+            this.m_ipc.SendMsg("generateImage2", prompt, nprompt, height, width, step, seed, this.m_model, "euler", "7" /* CFG scale*/);
         }
     }
     heightUpdate(heightTag) {
