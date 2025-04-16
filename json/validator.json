@@ -1,0 +1,11 @@
+{
+  "validators": [
+    {
+      "id": "root",
+      "publicKey": "1MFTNYxzWffwKjF1ovZwy3nFgaocdNAdLA",
+      "stake": 1000,
+      "joinedAt": "2025-04-10T12:00:00Z"
+    }
+  ]
+}
+
