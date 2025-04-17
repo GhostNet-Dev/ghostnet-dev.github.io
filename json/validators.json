@@ -5,6 +5,12 @@
       "publicKey": "1MFTNYxzWffwKjF1ovZwy3nFgaocdNAdLA",
       "stake": 1000,
       "joinedAt": "2025-04-10T12:00:00Z"
+    },
+    {
+      "id": "ghost",
+      "publicKey": "1GiNskAeVx6f5ua3Z7qX9YQrMxE23DSiRx",
+      "stake": 1000,
+      "joinedAt": "2025-04-10T12:00:00Z"
     }
   ]
 }
